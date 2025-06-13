@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة مؤشرات الأداء - صندوق استصلاح الأراضي</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js" defer></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Tajawal', sans-serif;
+            background-color: #f0f2f5;
+        }
+        .main-container {
+             background-image: linear-gradient(to top, rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.2)), url('https://images.unsplash.com/photo-1560493676-04071c5f467b?q=80&w=1974&auto=format&fit=crop');
+             background-size: cover;
+             background-position: center;
+             padding: 2.5rem; /* Increased padding */
+             border-radius: 1.5rem;
+        }
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+        }
+        .kpi-card {
+            background-color: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            padding: 1.75rem; /* Increased padding */
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            border: 1px solid rgba(255, 255, 255, 0.18);
+        }
+        .kpi-card-interactive:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.15);
+            cursor: pointer;
+        }
+        /* New styles for the trend KPI card */
+        .kpi-card-trend {
+            background: linear-gradient(135deg, #2a6f47 0%, #1a432b 100%);
+            color: white;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 6px 6px rgba(0,0,0,0.23);
+        }
+        .kpi-card-trend .kpi-title {
+            color: rgba(255, 255, 255, 0.8);
+            text-align: center;
+            font-weight: 500;
+        }
+        .kpi-card-trend .kpi-value {
+            color: white;
+            font-size: 3rem;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+        }
+        .kpi-card-trend .kpi-unit {
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 1rem;
+        }
+        .kpi-card-trend .trend-indicator {
+            width: fit-content;
+            margin: 0.5rem auto 0;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            background-color: rgba(255, 255, 255, 0.1);
+            justify-content: center;
+        }
+        .kpi-card-trend .trend-indicator.up {
+            color: #4ade80; 
+            background-color: rgba(74, 222, 128, 0.15);
+        }
+        .kpi-card-trend .trend-indicator.down {
+            color: #f87171;
+            background-color: rgba(248, 113, 113, 0.15);
+        }
+        .kpi-card-trend .sparkline-container {
+            opacity: 0.7;
+        }
+
+        .kpi-title {
+            font-size: 1.15rem; 
+            font-weight: 500;
+            color: #557A46;
+        }
+        .kpi-value {
+            font-size: 2.5rem; 
+            font-weight: 800;
+            color: #285430;
+        }
+        .kpi-unit {
+            font-size: 1.1rem; 
+            font-weight: 500;
+            color: #8C7A6B;
+            margin-right: 0.25rem;
+        }
+        .trend-indicator {
+            display: flex;
+            align-items: center;
+            font-weight: 700;
+            font-size: 1.1rem; 
+        }
+        .trend-indicator.up {
+            color: #16a34a;
+        }
+        .trend-indicator.down {
+            color: #dc2626;
+        }
+        .trend-indicator svg {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 0.25rem;
+        }
+        .sparkline-container {
+            height: 50px;
+            margin-top: auto; /* Push to bottom */
+        }
+        @keyframes kpi-animate {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .kpi-card.animated {
+            animation: kpi-animate 0.8s ease-out forwards;
+            opacity: 0; 
+        }
+        .section-title {
+            font-size: 2.25rem; 
+            font-weight: 700;
+            color: #ffffff;
+            margin-bottom: 2.5rem; 
+            text-align: center;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.3);
+        }
+        .chart-card {
+            background-color: #ffffff;
+            border-radius: 1rem;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+        }
+        .chart-title {
+            text-align: center;
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #285430;
+            margin-bottom: 1rem;
+        }
+        .chart-context {
+            text-align: center;
+            font-size: 0.95rem;
+            color: #557A46;
+            margin-top: 1.5rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        #details-modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.6);
+            z-index: 999;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            backdrop-filter: blur(5px);
+        }
+        #details-modal-container {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%) scale(0.95);
+            background-color: #f9fafb;
+            border-radius: 1rem;
+            box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
+            width: 90%;
+            max-width: 900px;
+            max-height: 90vh;
+            overflow: hidden;
+            display: none;
+            opacity: 0;
+            transition: opacity 0.3s ease, transform 0.3s ease;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-header {
+            padding: 1rem 1.5rem;
+            border-bottom: 1px solid #e5e7eb;
+            flex-shrink: 0;
+        }
+        .modal-body {
+            padding: 1.5rem;
+            overflow-y: auto;
+            flex-grow: 1;
+        }
+        .modal-close-btn {
+            background-color: #e5e7eb;
+            color: #4b5563;
+            border-radius: 9999px;
+            width: 2rem;
+            height: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.5rem;
+            line-height: 1;
+            transition: background-color 0.2s, color 0.2s;
+        }
+        .modal-close-btn:hover {
+            background-color: #d1d5db;
+            color: #1f2937;
+        }
+        #details-modal-overlay.visible {
+            display: block;
+            opacity: 1;
+        }
+        #details-modal-container.visible {
+            display: flex;
+            opacity: 1;
+            transform: translate(-50%, -50%) scale(1);
+        }
+        .professional-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .professional-table thead th {
+            background-color: #285430;
+            color: white;
+            padding: 0.75rem 1rem;
+            text-align: right;
+            font-weight: 600;
+        }
+        .professional-table tbody td {
+            padding: 0.75rem 1rem;
+            border-bottom: 1px solid #e5e7eb;
+            color: #374151;
+        }
+        .professional-table tbody tr:nth-child(even) {
+            background-color: #f3f4f6;
+        }
+        .professional-table tbody tr:hover {
+            background-color: #e5e7eb;
+        }
+        .professional-table .icon {
+            display: inline-block;
+            vertical-align: middle;
+            margin-left: 8px;
+            width: 20px;
+            height: 20px;
+        }
+        .professional-table .amount {
+            font-weight: 600;
+        }
+        .professional-table .amount.overdue {
+            color: #c81e1e;
+        }
+        .status-badge {
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+            font-weight: 600;
+            font-size: 0.8rem;
+        }
+        .status-badge.resolved {
+            background-color: #dcfce7;
+            color: #166534;
+        }
+        .status-badge.pending {
+            background-color: #fef9c3;
+            color: #854d0e;
+        }
+
+    </style>
+</head>
+<body class="antialiased">
+    <div class="main-container m-4">
+        <div class="container mx-auto">
+            <!-- Header Section -->
+            <header class="text-center mb-12">
+                <div class="flex justify-center items-center w-full mb-4">
+                     <img src="photo/logo gov.gif" alt="شعار 1" class="h-32 w-auto object-contain">
+                    <div class="flex-grow mx-8">
+                         <h1 class="text-4xl md:text-6xl font-extrabold text-white" style="text-shadow: 2px 2px 4px rgba(0,0,0,0.5);">
+                            لوحة مؤشرات الأداء
+                        </h1>
+                        <p class="text-lg text-gray-200 mt-1">صندوق استصلاح الأراضي</p>
+                    </div>
+                     <img src="photo/logo box.png" alt="شعار 2" class="h-32 w-auto object-contain">
+                </div>
+            </header>
+
+            <main>
+                <!-- Financial Vision Section -->
+                <section id="financial" class="mb-12">
+                    <h2 class="section-title">💰 الرؤية المالية</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 text-center">
+                        <div id="kpi-revenue" class="kpi-card kpi-card-interactive">
+                            <h3 class="kpi-title">إجمالي الإيرادات المحصلة</h3>
+                            <div><span class="kpi-value">75.4</span><span class="kpi-unit">مليون</span></div>
+                        </div>
+                        
+                        <!-- Trend KPI Card - New Design -->
+                        <div class="kpi-card kpi-card-trend animated">
+                            <h3 class="kpi-title">نمو الإيرادات الشهري</h3>
+                            <div class="text-center my-2">
+                                <span id="trend-kpi-value" class="kpi-value">0.0</span>
+                                <span class="kpi-unit">مليون</span>
+                            </div>
+                            <div id="trend-indicator" class="trend-indicator"></div>
+                            <div class="sparkline-container">
+                                <canvas id="revenueTrendChart"></canvas>
+                            </div>
+                        </div>
+
+                         <div class="kpi-card">
+                            <h3 class="kpi-title">نسبة التحصيل</h3>
+                            <div><span class="kpi-value">86.2</span><span class="kpi-unit">%</span></div>
+                        </div>
+                        <div id="kpi-overdue" class="kpi-card kpi-card-interactive" style="background-color: #FFFBEB; border-color: #FBBF24;">
+                            <h3 class="kpi-title" style="color: #92400E;">عدد الأقساط المتأخرة</h3>
+                            <div><span class="kpi-value" style="color: #D97706;">245</span><span class="kpi-unit" style="color: #B45309;">قسط</span></div>
+                        </div>
+                    </div>
+                     <div class="chart-card" data-chart-id="overdueInstallmentsChart">
+                        <h3 class="chart-title">توزيع الأقساط المتأخرة (آخر 6 شهور)</h3>
+                        <div class="chart-container"><canvas id="overdueInstallmentsChart"></canvas></div>
+                        <p class="chart-context">يساعد هذا الرسم البياني في تحديد الاتجاهات الموسمية للتأخير في السداد وتوجيه جهود التحصيل بشكل أكثر فعالية.</p>
+                    </div>
+                </section>
+                
+                <!-- Other sections ... -->
+                <section id="allocation" class="mb-12">
+                    <h2 class="section-title">🏞️ رؤية التخصيص</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-8">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-8">
+                            <div class="kpi-card text-center"><h3 class="kpi-title">إجمالي الطلبات</h3><div><span class="kpi-value">1,520</span><span class="kpi-unit">طلب</span></div></div>
+                            <div class="kpi-card text-center"><h3 class="kpi-title">الطلبات الموافق عليها</h3><div><span class="kpi-value">980</span><span class="kpi-unit">طلب</span></div></div>
+                            <div class="kpi-card text-center"><h3 class="kpi-title">عدد الأراضي المخصصة</h3><div><span class="kpi-value">855</span><span class="kpi-unit">قطعة</span></div></div>
+                            <div class="kpi-card text-center"><h3 class="kpi-title">متوسط مدة التخصيص</h3><div><span class="kpi-value">45</span><span class="kpi-unit">يوم</span></div></div>
+                        </div>
+                        <div class="chart-card flex flex-col justify-center items-center" data-chart-id="landTypeChart">
+                            <h3 class="chart-title">توزيع الأراضي حسب النوع</h3>
+                            <div class="chart-container" style="height: 280px; max-width: 280px;"><canvas id="landTypeChart"></canvas></div>
+                            <p class="chart-context">يعكس ديناميكية العرض والطلب بين الأراضي المطروحة والمقترحة.</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="execution" class="mb-12">
+                    <h2 class="section-title">🚧 رؤية التنفيذ والمتابعة</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+                        <div id="kpi-completed-projects" class="kpi-card kpi-card-interactive">
+                            <h3 class="kpi-title">مشاريع تم تنفيذها</h3>
+                             <div><span class="kpi-value">412</span><span class="kpi-unit">مشروع</span></div>
+                        </div>
+                        <div id="kpi-withdrawn-lands" class="kpi-card kpi-card-interactive">
+                            <h3 class="kpi-title">أراضٍ تم سحبها</h3>
+                             <div><span class="kpi-value">58</span><span class="kpi-unit">قطعة</span></div>
+                        </div>
+                        <div id="kpi-late-investors" class="kpi-card kpi-card-interactive" style="background-color: #FFFBEB; border-color: #FBBF24;">
+                            <h3 class="kpi-title" style="color: #92400E;">مستثمرون متأخرون</h3>
+                             <div><span class="kpi-value" style="color: #D97706;">97</span><span class="kpi-unit" style="color: #B45309;">مستثمر</span></div>
+                        </div>
+                    </div>
+                </section>
+
+                <section id="investors" class="mb-12">
+                    <h2 class="section-title">📊 مؤشرات فاعلية المستثمرين</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 text-center">
+                         <div id="kpi-registered-investors" class="kpi-card kpi-card-interactive">
+                            <h3 class="kpi-title">المستثمرون المسجلون</h3>
+                            <div><span class="kpi-value">550</span><span class="kpi-unit">مستثمر</span></div>
+                        </div>
+                        <div id="kpi-active-investors" class="kpi-card kpi-card-interactive">
+                            <h3 class="kpi-title">المستثمرون النشطون</h3>
+                            <div><span class="kpi-value">215</span><span class="kpi-unit">مستثمر</span></div>
+                        </div>
+                        <div class="kpi-card">
+                            <h3 class="kpi-title">نسبة التفاعل اليومي</h3>
+                            <div><span class="kpi-value">42</span><span class="kpi-unit">%</span></div>
+                        </div>
+                        <div class="kpi-card">
+                            <h3 class="kpi-title">مشاريع جديدة شهرياً</h3>
+                            <div><span class="kpi-value">15</span><span class="kpi-unit">مشروع</span></div>
+                        </div>
+                    </div>
+                    <div class="chart-card" data-chart-id="investorDistributionChart">
+                        <h3 class="chart-title">توزيع المستثمرين حسب حجم الاستثمار</h3>
+                        <div class="chart-container"><canvas id="investorDistributionChart"></canvas></div>
+                        <p class="chart-context">يعرض هذا المخطط شرائح المستثمرين بناءً على القيمة المالية لمشاريعهم.</p>
+                    </div>
+                </section>
+
+                <section id="admin" class="mb-12">
+                    <h2 class="section-title">⏳ مؤشرات زمنية وإدارية</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                        <div class="kpi-card text-center"><h3 class="kpi-title">متوسط زمن القرار</h3><div><span class="kpi-value">21</span><span class="kpi-unit">يوم</span></div></div>
+                        <div id="kpi-delayed-requests" class="kpi-card kpi-card-interactive text-center" style="background-color: #FFFBEB; border-color: #FBBF24;"><h3 class="kpi-title" style="color: #92400E;">طلبات متأخرة</h3><div><span class="kpi-value" style="color: #D97706;">35</span><span class="kpi-unit" style="color: #B45309;">طلب</span></div></div>
+                    </div>
+                </section>
+                
+                <section id="complaints" class="mb-12">
+                    <h2 class="section-title">⚖️ حالة الشكاوى والتظلمات</h2>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 text-center">
+                        <div id="kpi-total-complaints" class="kpi-card kpi-card-interactive">
+                            <h3 class="kpi-title">إجمالي الشكاوى</h3>
+                            <div><span class="kpi-value">4</span><span class="kpi-unit">شكوى</span></div>
+                        </div>
+                        <div id="kpi-resolved-complaints" class="kpi-card kpi-card-interactive">
+                            <h3 class="kpi-title">شكاوى تم حلها</h3>
+                            <div><span class="kpi-value">2</span><span class="kpi-unit">شكوى</span></div>
+                        </div>
+                        <div id="kpi-pending-complaints" class="kpi-card kpi-card-interactive" style="background-color: #FFFBEB; border-color: #FBBF24;">
+                            <h3 class="kpi-title" style="color: #92400E;">قيد المراجعة</h3>
+                            <div><span class="kpi-value" style="color: #D97706;">2</span><span class="kpi-unit" style="color: #B45309;">شكوى</span></div>
+                        </div>
+                    </div>
+                    <div class="chart-card" data-chart-id="complaintsChart">
+                        <h3 class="chart-title">نسبة الشكاوى المفتوحة والمغلقة</h3>
+                        <div class="chart-container" style="height: 200px;"><canvas id="complaintsChart"></canvas></div>
+                        <p class="chart-context">مؤشر لكفاءة التعامل مع شكاوى المستثمرين.</p>
+                    </div>
+                </section>
+            </main>
+    
+            <footer class="text-center mt-12 pt-8 border-t border-gray-200/20">
+                <p class="text-sm text-white font-light">&copy; 2024 صندوق استصلاح الأراضي، محافظة الوادي الجديد. جميع الحقوق محفوظة.</p>
+            </footer>
+        </div>
+    </div>
+
+    <!-- Drill-Down Modal Structure -->
+    <div id="details-modal-overlay"></div>
+    <div id="details-modal-container">
+        <div class="modal-header flex justify-between items-center"><h3 id="details-modal-title" class="text-2xl font-bold text-[#285430]"></h3><button id="details-modal-close" class="modal-close-btn">&times;</button></div>
+        <div class="modal-body"><div id="details-modal-content"></div></div>
+    </div>
+
+    <script defer>
+        const mockData = {
+            revenue: [{ name: 'شركة النيل الزراعية', amount: '500,000 ج.م', date: '2024-05-15', method: 'تحويل بنكي', installment: 3 },{ name: 'مزارع الوادي الجديد', amount: '250,000 ج.م', date: '2024-05-12', method: 'شيك', installment: 1 },],
+            dues: [{ name: 'مستثمر الأمل', amount: '120,000 ج.م', dueDate: '2024-04-30', overdueDays: 45, phone: '01001234567' },{ name: 'أراضي الخير', amount: '85,000 ج.م', dueDate: '2024-05-10', overdueDays: 35, phone: '01223456789' },],
+            overdue: { monthlyDistribution: [{ month: 'يناير', count: 45 }, { month: 'فبراير', count: 60 }, { month: 'مارس', count: 55 },{ month: 'أبريل', count: 75 }, { month: 'مايو', count: 65 }, { month: 'يونيو', count: 85 }], details: [{ name: 'شركة الصحراء الخضراء', installment: 2, amount: '75,000 ج.م', dueDate: '2024-06-01' },{ name: 'مستثمر المستقبل', installment: 4, amount: '90,000 ج.м', dueDate: '2024-06-05' },] },
+            completedProjects: [{ name: 'مشروع القمح الذهبي', investor: 'شركة النيل الزراعية', date: '2023-12-20', area: '500 فدان' },{ name: 'مزارع الزيتون المبارك', investor: 'استثمار الواحات', date: '2024-02-11', area: '1200 فدان' },],
+            withdrawnLands: [{ investor: 'شركة الرمال المتحركة', landId: 'ق-884-ب', reason: 'عدم الجدية', date: '2024-03-01' },{ investor: 'مستثمر غير معروف', landId: 'س-101-ج', reason: 'مخالفة شروط التعاقد', date: '2024-05-18' },],
+            lateInvestors: [{ name: 'مستثمر الأمل', overdueAmount: '120,000 ج.م', lastPayment: '2023-11-01', phone: '01001234567' },{ name: 'أراضي الخير', overdueAmount: '85,000 ج.م', lastPayment: '2024-01-15', phone: '01223456789' },],
+            registeredInvestors: [{ name: 'شركة الوادي الجديد القابضة', joinDate: '2022-01-15', status: 'نشط' },{ name: 'مجموعة الأفق الزراعية', joinDate: '2022-03-10', status: 'نشط' },{ name: 'مستثمر فردي', joinDate: '2024-06-01', status: 'جديد' },],
+            activeInvestors: [{ name: 'شركة الوادي الجديد القابضة', lastActivity: '2024-06-12', openProjects: 3 },{ name: 'مجموعة الأفق الزراعية', lastActivity: '2024-06-10', openProjects: 1 },],
+            delayedRequests: [{ id: 'طلب-1984', type: 'تخصيص أرض', submitted: '2024-04-01', daysDelayed: 38 },{ id: 'طلب-2011', type: 'تغيير نشاط', submitted: '2024-04-15', daysDelayed: 24 },],
+            complaints: [
+                { id: 'C-001', investor: 'شركة النيل', subject: 'تأخر في الرد', date: '2024-06-01', status: 'مغلقة', resolutionDate: '2024-06-05' },
+                { id: 'C-002', investor: 'مستثمر الأمل', subject: 'خطأ في الفاتورة', date: '2024-06-02', status: 'قيد المراجعة', resolutionDate: null },
+                { id: 'C-003', investor: 'أراضي الخير', subject: 'استفسار عن تخصيص', date: '2024-06-03', status: 'مغلقة', resolutionDate: '2024-06-04' },
+                { id: 'C-004', investor: 'الصحراء الخضراء', subject: 'مشكلة فنية', date: '2024-06-10', status: 'قيد المراجعة', resolutionDate: null },
+            ],
+            monthlyRevenue: [10.2, 11.5, 11.1, 12.8, 12.5, 13.2]
+        };
+
+        const icons = {
+            user: `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" /></svg>`,
+            money: `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M8.433 7.418c.158-.103.346-.196.567-.267v1.698a2.5 2.5 0 004 0V7.15c.22.07.408.164.567.267C13.96 7.888 14 8.242 14 8.5v1.5a2.5 2.5 0 005 0V9a1 1 0 00-1-1h-.547l-1.35-1.35A.5.5 0 0015.5 6H14V5a1 1 0 00-1-1H7a1 1 0 00-1 1v1H4.5a.5.5 0 00-.354.146L2.793 7.5H2a1 1 0 00-1 1v1.5a2.5 2.5 0 005 0V8.5c0-.258-.04-.612-.433-1.082zM3 12.5a2.5 2.5 0 015 0V14a1 1 0 01-1 1H4a1 1 0 01-1-1v-1.5zM12 12.5a2.5 2.5 0 015 0V14a1 1 0 01-1 1h-3a1 1 0 01-1-1v-1.5z" /></svg>`,
+            calendar: `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd" /></svg>`,
+            card: `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M4 4a2 2 0 00-2 2v1h16V6a2 2 0 00-2-2H4z" /><path fill-rule="evenodd" d="M18 9H2v6a2 2 0 002 2h12a2 2 0 002-2V9zM4 13a1 1 0 011-1h1a1 1 0 110 2H5a1 1 0 01-1-1zm3 0a1 1 0 011-1h1a1 1 0 110 2H8a1 1 0 01-1-1z" clip-rule="evenodd" /></svg>`,
+            hashtag: `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path fill-rule="evenodd" d="M9.243 3.03a1 1 0 01.727 1.213L9.53 6h2.94l.56-2.243a1 1 0 111.94.486L14.47 6h2.03a1 1 0 110 2h-2.03l-.56 2.243a1 1 0 11-1.94-.486L10.47 8H7.53l-.56 2.243a1 1 0 11-1.94-.486L5.53 8H3.5a1 1 0 110-2h2.03l.56-2.243a1 1 0 011.213-.727zM9.53 10h2.94l.56 2.243a1 1 0 11-1.94.486L10.47 12H7.53l-.56 2.243a1 1 0 11-1.94-.486L5.53 12H3.5a1 1 0 110-2h2.03l.56-2.243z" clip-rule="evenodd" /></svg>`,
+            phone: `<svg class="icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.518.759a11.38 11.38 0 005.454 5.454l.759-1.518a1 1 0 011.06-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" /></svg>`
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const modalOverlay = document.getElementById('details-modal-overlay');
+            const modalContainer = document.getElementById('details-modal-container');
+            const modalTitle = document.getElementById('details-modal-title');
+            const modalContent = document.getElementById('details-modal-content');
+            const closeModalBtn = document.getElementById('details-modal-close');
+            const kpiCards = document.querySelectorAll('.kpi-card-interactive');
+            const tooltipConfig = { plugins: { tooltip: { bodyFont: { family: 'Tajawal' }, titleFont: { family: 'Tajawal' }, rtl: true, }, legend: { labels: { font: { family: 'Tajawal', size: 14 } } } }, responsive: true, maintainAspectRatio: false };
+            const chartColors = { primary: '#285430', secondary: '#557A46', light: '#A4B0A5', accent: '#D97706', danger: '#be123c' };
+
+            const openModal = () => { modalOverlay.classList.add('visible'); modalContainer.classList.add('visible'); };
+            const closeModal = () => { modalOverlay.classList.remove('visible'); modalContainer.classList.remove('visible'); };
+
+            closeModalBtn.addEventListener('click', closeModal);
+            modalOverlay.addEventListener('click', closeModal);
+
+            const generateContent = (type) => {
+                let html = '';
+                let title = '';
+                const tableTemplate = (headers, rows) => `<div class="overflow-x-auto"><table class="professional-table"><thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table></div>`;
+                
+                switch (type) {
+                    case 'revenue': title = 'تفاصيل الإيرادات المحصلة'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>${icons.money}المبلغ</th><th>${icons.calendar}التاريخ</th><th>${icons.card}طريقة الدفع</th><th>${icons.hashtag}القسط</th>`, mockData.revenue.map(item => `<tr><td>${item.name}</td><td class="amount">${item.amount}</td><td>${item.date}</td><td>${item.method}</td><td class="text-center">${item.installment}</td></tr>`).join('')); break;
+                    case 'dues': title = 'تفاصيل المستحقات المتأخرة'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>${icons.money}المبلغ</th><th>${icons.calendar}تاريخ الاستحقاق</th><th>${icons.calendar}أيام التأخير</th><th>${icons.phone}رقم الهاتف</th>`, mockData.dues.map(item => `<tr><td>${item.name}</td><td class="amount overdue">${item.amount}</td><td>${item.dueDate}</td><td class="text-center">${item.overdueDays}</td><td>${item.phone}</td></tr>`).join('')); break;
+                    case 'overdue': title = 'تفاصيل الأقساط المتأخرة'; html = `<h4 class="text-lg font-semibold text-gray-700 mb-3">التوزيع الشهري</h4><div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">${mockData.overdue.monthlyDistribution.map(item => `<div class="bg-amber-100 p-3 rounded-lg text-center border border-amber-200"><div class="font-bold text-amber-800">${item.month}</div><div class="text-2xl font-extrabold text-amber-600">${item.count}</div></div>`).join('')}</div><h4 class="text-lg font-semibold text-gray-700 mb-3 mt-6">عينة من الأقساط</h4>` + tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>${icons.hashtag}القسط</th><th>${icons.money}المبلغ</th><th>${icons.calendar}تاريخ الاستحقاق</th>`, mockData.overdue.details.map(item => `<tr><td>${item.name}</td><td class="text-center">${item.installment}</td><td class="amount overdue">${item.amount}</td><td>${item.dueDate}</td></tr>`).join('')); break;
+                    case 'completed-projects': title = 'المشاريع المنفذة'; html = tableTemplate(`<th>اسم المشروع</th><th>المستثمر</th><th>تاريخ الاكتمال</th><th>المساحة</th>`, mockData.completedProjects.map(item => `<tr><td>${item.name}</td><td>${item.investor}</td><td>${item.date}</td><td>${item.area}</td></tr>`).join('')); break;
+                    case 'withdrawn-lands': title = 'الأراضي المسحوبة'; html = tableTemplate(`<th>المستثمر</th><th>رقم القطعة</th><th>سبب السحب</th><th>التاريخ</th>`, mockData.withdrawnLands.map(item => `<tr><td>${item.investor}</td><td>${item.landId}</td><td class="amount overdue">${item.reason}</td><td>${item.date}</td></tr>`).join('')); break;
+                    case 'late-investors': title = 'المستثمرون المتأخرون في السداد'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>${icons.money}المبلغ المتأخر</th><th>تاريخ آخر سداد</th><th>${icons.phone}رقم الهاتف</th>`, mockData.lateInvestors.map(item => `<tr><td>${item.name}</td><td class="amount overdue">${item.overdueAmount}</td><td>${item.lastPayment}</td><td>${item.phone}</td></tr>`).join('')); break;
+                    case 'registered-investors': title = 'قائمة المستثمرين المسجلين'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>تاريخ الانضمام</th><th>الحالة</th>`, mockData.registeredInvestors.map(item => `<tr><td>${item.name}</td><td>${item.joinDate}</td><td><span class="px-2 py-1 font-semibold leading-tight ${item.status === 'نشط' ? 'text-green-700 bg-green-100' : 'text-blue-700 bg-blue-100'} rounded-full">${item.status}</span></td></tr>`).join('')); break;
+                    case 'active-investors': title = 'قائمة المستثمرين النشطين'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>آخر نشاط</th><th>مشاريع مفتوحة</th>`, mockData.activeInvestors.map(item => `<tr><td>${item.name}</td><td>${item.lastActivity}</td><td class="text-center">${item.openProjects}</td></tr>`).join('')); break;
+                    case 'delayed-requests': title = 'الطلبات المتأخرة عن الجدول الزمني'; html = tableTemplate(`<th>رقم الطلب</th><th>نوع الطلب</th><th>تاريخ التقديم</th><th>أيام التأخير</th>`, mockData.delayedRequests.map(item => `<tr><td>${item.id}</td><td>${item.type}</td><td>${item.submitted}</td><td class="text-center amount overdue">${item.daysDelayed}</td></tr>`).join('')); break;
+                    case 'total-complaints': title = 'إجمالي الشكاوى والتظلمات'; html = tableTemplate(`<th>رقم الشكوى</th><th>المشتكي</th><th>الموضوع</th><th>تاريخها</th><th>الحالة</th>`, mockData.complaints.map(item => `<tr><td>${item.id}</td><td>${item.investor}</td><td>${item.subject}</td><td>${item.date}</td><td><span class="status-badge ${item.status === 'مغلقة' ? 'resolved' : 'pending'}">${item.status}</span></td></tr>`).join('')); break;
+                    case 'resolved-complaints': title = 'الشكاوى التي تم حلها'; html = tableTemplate(`<th>رقم الشكوى</th><th>المشتكي</th><th>الموضوع</th><th>تاريخ الحل</th>`, mockData.complaints.filter(c => c.status === 'مغلقة').map(item => `<tr><td>${item.id}</td><td>${item.investor}</td><td>${item.subject}</td><td>${item.resolutionDate}</td></tr>`).join('')); break;
+                    case 'pending-complaints': title = 'شكاوى قيد المراجعة'; html = tableTemplate(`<th>رقم الشكوى</th><th>المشتكي</th><th>الموضوع</th><th>تاريخ التقديم</th>`, mockData.complaints.filter(c => c.status === 'قيد المراجعة').map(item => `<tr><td>${item.id}</td><td>${item.investor}</td><td>${item.subject}</td><td>${item.date}</td></tr>`).join('')); break;
+                }
+                modalTitle.innerText = title;
+                modalContent.innerHTML = html;
+            };
+
+            kpiCards.forEach(card => card.addEventListener('click', () => { generateContent(card.id.replace('kpi-', '')); openModal(); }));
+        
+            // --- Trend KPI Animation ---
+            function animateValue(element, start, end, duration) {
+                let startTimestamp = null;
+                const step = (timestamp) => {
+                    if (!startTimestamp) startTimestamp = timestamp;
+                    const progress = Math.min((timestamp - startTimestamp) / duration, 1);
+                    const currentValue = progress * (end - start) + start;
+                    element.textContent = currentValue.toFixed(1);
+                    if (progress < 1) {
+                        window.requestAnimationFrame(step);
+                    } else {
+                        element.textContent = end.toFixed(1);
+                    }
+                };
+                window.requestAnimationFrame(step);
+            }
+
+            const trendValueEl = document.getElementById('trend-kpi-value');
+            const trendIndicatorEl = document.getElementById('trend-indicator');
+            const monthlyRevenueData = mockData.monthlyRevenue;
+            const currentMonthRevenue = monthlyRevenueData[monthlyRevenueData.length - 1];
+            const previousMonthRevenue = monthlyRevenueData[monthlyRevenueData.length - 2];
+            const percentageChange = ((currentMonthRevenue - previousMonthRevenue) / previousMonthRevenue) * 100;
+            const isUp = percentageChange >= 0;
+            
+            animateValue(trendValueEl, 0, currentMonthRevenue, 1500);
+
+            trendIndicatorEl.classList.add(isUp ? 'up' : 'down');
+            const arrow = isUp 
+                ? `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" /></svg>` 
+                : `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" /></svg>`;
+            
+            const percentageSpan = document.createElement('span');
+            percentageSpan.textContent = '0.0';
+            trendIndicatorEl.innerHTML = `<span>${arrow} </span>`;
+            trendIndicatorEl.firstChild.appendChild(percentageSpan);
+            trendIndicatorEl.firstChild.append('%');
+
+            animateValue(percentageSpan, 0, Math.abs(percentageChange), 1500);
+
+
+            // Sparkline Chart
+            new Chart(document.getElementById('revenueTrendChart'), {
+                type: 'line', data: { labels: ['', '', '', '', '', ''], datasets: [{ data: monthlyRevenueData, borderColor: 'white', borderWidth: 2, fill: true, backgroundColor: 'rgba(255, 255, 255, 0.1)', tension: 0.4 }] },
+                options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false } }, elements: { point: { radius: 0 } } }
+            });
+
+            // --- Lazy Loading Chart Initialization ---
+            const chartInitializer = (entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        const chartId = entry.target.dataset.chartId;
+                        if (entry.target.chart) return; 
+                        switch(chartId) {
+                            case 'overdueInstallmentsChart':
+                                entry.target.chart = new Chart(document.getElementById('overdueInstallmentsChart'), { type: 'bar', data: { labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'], datasets: [{ label: 'عدد الأقساط المتأخرة', data: [45, 60, 55, 75, 65, 85], backgroundColor: chartColors.secondary, borderColor: chartColors.primary, borderWidth: 1, borderRadius: 5 }] }, options: { ...tooltipConfig, scales: { y: { beginAtZero: true, ticks: { font: { family: 'Tajawal' } } }, x: { ticks: { font: { family: 'Tajawal' } } } } } });
+                                break;
+                            case 'landTypeChart':
+                                entry.target.chart = new Chart(document.getElementById('landTypeChart'), { type: 'doughnut', data: { labels: ['أراضٍ مطروحة', 'أراضٍ مقترحة'], datasets: [{ data: [68, 32], backgroundColor: [chartColors.primary, chartColors.light], borderColor: '#ffffff', borderWidth: 4 }] }, options: { ...tooltipConfig, plugins: { ...tooltipConfig.plugins, legend: { position: 'bottom', ...tooltipConfig.plugins.legend } } } });
+                                break;
+                            case 'investorDistributionChart':
+                                entry.target.chart = new Chart(document.getElementById('investorDistributionChart'), { type: 'bar', data: { labels: ['أقل من 1م', '1-5م', '5-10م', 'أكثر من 10م'], datasets: [{ label: 'عدد المستثمرين', data: [110, 65, 32, 8], backgroundColor: [chartColors.light, chartColors.secondary, chartColors.primary, chartColors.accent], borderWidth: 0, borderRadius: 5 }] }, options: { ...tooltipConfig, plugins: { ...tooltipConfig.plugins, legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { font: { family: 'Tajawal' } } }, x: { ticks: { font: { family: 'Tajawal' } } } } } });
+                                break;
+                            case 'complaintsChart':
+                                const resolvedCount = mockData.complaints.filter(c => c.status === 'مغلقة').length;
+                                const pendingCount = mockData.complaints.filter(c => c.status === 'قيد المراجعة').length;
+                                entry.target.chart = new Chart(document.getElementById('complaintsChart'), { type: 'bar', data: { labels: ['حالة الشكاوى'], datasets: [{ label: 'مغلقة', data: [resolvedCount], backgroundColor: chartColors.secondary, borderRadius: 5 }, { label: 'مفتوحة', data: [pendingCount], backgroundColor: chartColors.danger, borderRadius: 5 }] }, options: { ...tooltipConfig, indexAxis: 'y', scales: { x: { stacked: true, ticks: { callback: (v) => v + '%', font: { family: 'Tajawal' } } }, y: { stacked: true, ticks: { font: { family: 'Tajawal' } } } } } });
+                                break;
+                        }
+                        observer.unobserve(entry.target);
+                    }
+                });
+            };
+
+            const chartObserver = new IntersectionObserver(chartInitializer, { rootMargin: "0px", threshold: 0.1 });
+            document.querySelectorAll('[data-chart-id]').forEach(el => chartObserver.observe(el));
+        });
+    </script>
+</body>
+</html>
