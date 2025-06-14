@@ -363,8 +363,8 @@
                     <h2 class="section-title">💰 الرؤية المالية</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 mb-8 text-center">
                         <div data-kpi-id="revenue" class="kpi-card kpi-card-interactive" data-animate-value="true">
-                            <h3 class="kpi-title">إجمالي الإيرادات</h3>
-                            <div><span class="kpi-value">75.4</span><span class="kpi-unit">مليون</span></div>
+                            <h3 class="kpi-title" style="font-size: 1.25rem;">إجمالي الإيرادات</h3>
+                            <div><span class="kpi-value" style="font-size: 3.5rem; line-height: 1.2;">75.4</span><span class="kpi-unit" style="font-size: 1.25rem;">مليون</span></div>
                         </div>
                         
                         <div class="kpi-card kpi-card-trend" data-animate-kpi>
@@ -382,8 +382,8 @@
                         </div>
                         
                         <div data-kpi-id="dues-amount" class="kpi-card kpi-card-interactive" data-animate-value="true">
-                            <h3 class="kpi-title">المستحقات المتأخرة (مبلغ)</h3>
-                            <div><span class="kpi-value" style="color: #c81e1e;">12.1</span><span class="kpi-unit">مليون</span></div>
+                            <h3 class="kpi-title" style="font-size: 1.25rem;">المستحقات المتأخرة</h3>
+                            <div><span class="kpi-value" style="color: #c81e1e; font-size: 3.5rem; line-height: 1.2;">12.1</span><span class="kpi-unit" style="font-size: 1.25rem;">مليون</span></div>
                         </div>
 
                         <div data-kpi-id="overdue" class="kpi-card kpi-card-interactive" style="background-color: #FFFBEB; border: 1px solid #FBBF24;" data-animate-value="false">
@@ -613,9 +613,7 @@
                         const animatedValueEl = entry.target.querySelector('.kpi-value');
 
                         if (kpiCardEl && !entry.target.isAnimated) {
-                            entry.target.isAnimated = true; 
-                            
-                            const trendCard = document.querySelector('.kpi-card-trend');
+                            entry.target.isAnimated = true; // Prevents re-animation on scroll
                             const trendValueEl = document.getElementById('trend-kpi-value');
                             const trendIndicatorEl = document.getElementById('trend-indicator');
                             const monthlyRevenueData = mockData.monthlyRevenue;
@@ -624,20 +622,18 @@
                             const percentageChange = ((currentMonthRevenue - previousMonthRevenue) / previousMonthRevenue) * 100;
                             const isUp = percentageChange >= 0;
                             
-                            const startAnimation = () => {
-                                animateValue(trendValueEl, 0, currentMonthRevenue, 1500);
-                                trendIndicatorEl.classList.add(isUp ? 'up' : 'down');
-                                trendIndicatorEl.classList.remove(isUp ? 'down' : 'up');
-                                const arrow = isUp ? `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" /></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" /></svg>`;
-                                const percentageSpan = document.createElement('span');
-                                percentageSpan.textContent = '0.0';
-                                trendIndicatorEl.innerHTML = `${arrow}`;
-                                trendIndicatorEl.appendChild(percentageSpan);
-                                percentageSpan.append('%');
-                                animateValue(percentageSpan, 0, Math.abs(percentageChange), 1500);
-                            };
-
-                            startAnimation();
+                            animateValue(trendValueEl, 0, currentMonthRevenue, 1500);
+                            trendIndicatorEl.classList.add(isUp ? 'up' : 'down');
+                            trendIndicatorEl.classList.remove(isUp ? 'down' : 'up');
+                            const arrow = isUp ? `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18" /></svg>` : `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 13.5L12 21m0 0l-7.5-7.5M12 21V3" /></svg>`;
+                            const percentageSpan = document.createElement('span');
+                            percentageSpan.textContent = '0.0';
+                            trendIndicatorEl.innerHTML = `${arrow}`;
+                            trendIndicatorEl.appendChild(percentageSpan);
+                            percentageSpan.append('%');
+                            animateValue(percentageSpan, 0, Math.abs(percentageChange), 1500);
+                            
+                            new Chart(document.getElementById('revenueTrendChart'), { type: 'line', data: { labels: ['', '', '', '', '', ''], datasets: [{ data: monthlyRevenueData, borderColor: 'white', borderWidth: 2, fill: true, backgroundColor: 'rgba(255, 255, 255, 0.1)', tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false } }, elements: { point: { radius: 0 } } } });
                             
                             observer.unobserve(entry.target);
                         }
