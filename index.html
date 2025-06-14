@@ -362,7 +362,7 @@
                 <section id="financial" class="mb-12">
                     <h2 class="section-title">💰 الرؤية المالية</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 mb-8 text-center">
-                        <div data-kpi-id="revenue" class="kpi-card kpi-card-interactive">
+                        <div data-kpi-id="revenue" class="kpi-card kpi-card-interactive" data-animate-value="true">
                             <h3 class="kpi-title">إجمالي الإيرادات</h3>
                             <div><span class="kpi-value">75.4</span><span class="kpi-unit">مليون</span></div>
                         </div>
@@ -381,12 +381,12 @@
                             </div>
                         </div>
                         
-                        <div data-kpi-id="dues-amount" class="kpi-card kpi-card-interactive">
+                        <div data-kpi-id="dues-amount" class="kpi-card kpi-card-interactive" data-animate-value="true">
                             <h3 class="kpi-title">المستحقات المتأخرة (مبلغ)</h3>
                             <div><span class="kpi-value" style="color: #c81e1e;">12.1</span><span class="kpi-unit">مليون</span></div>
                         </div>
 
-                        <div data-kpi-id="overdue" class="kpi-card kpi-card-interactive" style="background-color: #FFFBEB; border: 1px solid #FBBF24;">
+                        <div data-kpi-id="overdue" class="kpi-card kpi-card-interactive" style="background-color: #FFFBEB; border: 1px solid #FBBF24;" data-animate-value="false">
                             <h3 class="kpi-title" style="color: #92400E;">أقساط متأخرة (عدد)</h3>
                             <div><span class="kpi-value" style="color: #D97706;">245</span><span class="kpi-unit" style="color: #B45309;">قسط</span></div>
                         </div>
@@ -396,7 +396,7 @@
                             <div><span id="top-revenue-center" class="kpi-value text-green-600"></span></div>
                         </div>
 
-                         <div class="kpi-card">
+                         <div class="kpi-card" data-animate-value="true">
                             <h3 class="kpi-title">نسبة التحصيل</h3>
                             <div><span class="kpi-value">86.2</span><span class="kpi-unit">%</span></div>
                         </div>
@@ -418,10 +418,10 @@
                     <h2 class="section-title">🏞️ رؤية التخصيص</h2>
                     <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
                         <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-                            <div class="kpi-card text-center"><h3 class="kpi-title">إجمالي الطلبات</h3><div><span class="kpi-value">1,520</span><span class="kpi-unit">طلب</span></div></div>
-                            <div class="kpi-card text-center"><h3 class="kpi-title">طلبات موافق عليها</h3><div><span class="kpi-value">980</span><span class="kpi-unit">طلب</span></div></div>
-                            <div class="kpi-card text-center"><h3 class="kpi-title">أراض مخصصة</h3><div><span class="kpi-value">855</span><span class="kpi-unit">قطعة</span></div></div>
-                            <div class="kpi-card text-center"><h3 class="kpi-title">متوسط مدة التخصيص</h3><div><span class="kpi-value">45</span><span class="kpi-unit">يوم</span></div></div>
+                            <div class="kpi-card text-center" data-animate-value="false"><h3 class="kpi-title">إجمالي الطلبات</h3><div><span class="kpi-value">1520</span><span class="kpi-unit">طلب</span></div></div>
+                            <div class="kpi-card text-center" data-animate-value="false"><h3 class="kpi-title">طلبات موافق عليها</h3><div><span class="kpi-value">980</span><span class="kpi-unit">طلب</span></div></div>
+                            <div class="kpi-card text-center" data-animate-value="false"><h3 class="kpi-title">أراض مخصصة</h3><div><span class="kpi-value">855</span><span class="kpi-unit">قطعة</span></div></div>
+                            <div class="kpi-card text-center" data-animate-value="false"><h3 class="kpi-title">متوسط مدة التخصيص</h3><div><span class="kpi-value">45</span><span class="kpi-unit">يوم</span></div></div>
                         </div>
                         <div class="chart-card flex flex-col justify-center items-center" data-chart-id="landTypeChart">
                             <h3 class="chart-title">توزيع الأراضي حسب النوع</h3>
@@ -434,15 +434,15 @@
                 <section id="execution" class="mb-12">
                     <h2 class="section-title">🚧 رؤية التنفيذ والمتابعة</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                        <div data-kpi-id="completed-projects" class="kpi-card kpi-card-interactive">
+                        <div data-kpi-id="completed-projects" class="kpi-card kpi-card-interactive" data-animate-value="false">
                             <h3 class="kpi-title">مشاريع تم تنفيذها</h3>
                              <div><span class="kpi-value">412</span><span class="kpi-unit">مشروع</span></div>
                         </div>
-                        <div data-kpi-id="withdrawn-lands" class="kpi-card kpi-card-interactive">
+                        <div data-kpi-id="withdrawn-lands" class="kpi-card kpi-card-interactive" data-animate-value="false">
                             <h3 class="kpi-title">أراضٍ تم سحبها</h3>
                              <div><span class="kpi-value">58</span><span class="kpi-unit">قطعة</span></div>
                         </div>
-                        <div data-kpi-id="late-investors" class="kpi-card kpi-card-interactive" style="background-color: #FFFBEB; border: 1px solid #FBBF24;">
+                        <div data-kpi-id="late-investors" class="kpi-card kpi-card-interactive" style="background-color: #FFFBEB; border: 1px solid #FBBF24;" data-animate-value="false">
                             <h3 class="kpi-title" style="color: #92400E;">مستثمرون متأخرون</h3>
                              <div><span class="kpi-value" style="color: #D97706;">97</span><span class="kpi-unit" style="color: #B45309;">مستثمر</span></div>
                         </div>
@@ -451,19 +451,19 @@
                 <section id="investors" class="mb-12">
                     <h2 class="section-title">📊 مؤشرات فاعلية المستثمرين</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 mb-8 text-center">
-                         <div data-kpi-id="registered-investors" class="kpi-card kpi-card-interactive">
+                         <div data-kpi-id="registered-investors" class="kpi-card kpi-card-interactive" data-animate-value="false">
                             <h3 class="kpi-title">المستثمرون المسجلون</h3>
                             <div><span class="kpi-value">550</span><span class="kpi-unit">مستثمر</span></div>
                         </div>
-                        <div data-kpi-id="active-investors" class="kpi-card kpi-card-interactive">
+                        <div data-kpi-id="active-investors" class="kpi-card kpi-card-interactive" data-animate-value="false">
                             <h3 class="kpi-title">المستثمرون النشطون</h3>
                             <div><span class="kpi-value">215</span><span class="kpi-unit">مستثمر</span></div>
                         </div>
-                        <div class="kpi-card">
+                        <div class="kpi-card" data-animate-value="false">
                             <h3 class="kpi-title">نسبة التفاعل اليومي</h3>
                             <div><span class="kpi-value">42</span><span class="kpi-unit">%</span></div>
                         </div>
-                        <div class="kpi-card">
+                        <div class="kpi-card" data-animate-value="false">
                             <h3 class="kpi-title">مشاريع جديدة شهرياً</h3>
                             <div><span class="kpi-value">15</span><span class="kpi-unit">مشروع</span></div>
                         </div>
@@ -477,24 +477,24 @@
                 <section id="admin" class="mb-12">
                     <h2 class="section-title">⏳ مؤشرات زمنية وإدارية</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                        <div class="kpi-card text-center"><h3 class="kpi-title">متوسط زمن القرار</h3><div><span class="kpi-value">21</span><span class="kpi-unit">يوم</span></div></div>
-                        <div data-kpi-id="delayed-requests" class="kpi-card kpi-card-interactive text-center" style="background-color: #FFFBEB; border: 1px solid #FBBF24;"><h3 class="kpi-title" style="color: #92400E;">طلبات متأخرة</h3><div><span class="kpi-value" style="color: #D97706;">35</span><span class="kpi-unit" style="color: #B45309;">طلب</span></div></div>
+                        <div class="kpi-card text-center" data-animate-value="false"><h3 class="kpi-title">متوسط زمن القرار</h3><div><span class="kpi-value">21</span><span class="kpi-unit">يوم</span></div></div>
+                        <div data-kpi-id="delayed-requests" class="kpi-card kpi-card-interactive text-center" style="background-color: #FFFBEB; border: 1px solid #FBBF24;" data-animate-value="false"><h3 class="kpi-title" style="color: #92400E;">طلبات متأخرة</h3><div><span class="kpi-value">35</span><span class="kpi-unit" style="color: #B45309;">طلب</span></div></div>
                     </div>
                 </section>
                 <section id="complaints" class="mb-12">
                     <h2 class="section-title">⚖️ حالة الشكاوى والتظلمات</h2>
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8 text-center">
-                        <div data-kpi-id="total-complaints" class="kpi-card kpi-card-interactive">
+                        <div data-kpi-id="total-complaints" class="kpi-card kpi-card-interactive" data-animate-value="false">
                             <h3 class="kpi-title">إجمالي الشكاوى</h3>
                             <div><span class="kpi-value">4</span><span class="kpi-unit">شكوى</span></div>
                         </div>
-                        <div data-kpi-id="resolved-complaints" class="kpi-card kpi-card-interactive">
+                        <div data-kpi-id="resolved-complaints" class="kpi-card kpi-card-interactive" data-animate-value="false">
                             <h3 class="kpi-title">شكاوى تم حلها</h3>
                             <div><span class="kpi-value">2</span><span class="kpi-unit">شكوى</span></div>
                         </div>
-                        <div data-kpi-id="pending-complaints" class="kpi-card kpi-card-interactive" style="background-color: #FFFBEB; border: 1px solid #FBBF24;">
+                        <div data-kpi-id="pending-complaints" class="kpi-card kpi-card-interactive" style="background-color: #FFFBEB; border: 1px solid #FBBF24;" data-animate-value="false">
                             <h3 class="kpi-title" style="color: #92400E;">قيد المراجعة</h3>
-                            <div><span class="kpi-value" style="color: #D97706;">2</span><span class="kpi-unit" style="color: #B45309;">شكوى</span></div>
+                            <div><span class="kpi-value">2</span><span class="kpi-unit" style="color: #B45309;">شكوى</span></div>
                         </div>
                     </div>
                     <div class="chart-card" data-chart-id="complaintsChart">
@@ -610,6 +610,7 @@
                     if (entry.isIntersecting) {
                         const chartId = entry.target.dataset.chartId;
                         const kpiCardEl = entry.target.hasAttribute('data-animate-kpi');
+                        const animatedValueEl = entry.target.querySelector('.kpi-value');
 
                         if (kpiCardEl && !entry.target.isAnimated) {
                             entry.target.isAnimated = true; 
@@ -638,12 +639,14 @@
 
                             startAnimation();
                             
-                            if (trendCard) {
-                                trendCard.addEventListener('click', startAnimation);
-                            }
-
-                            new Chart(document.getElementById('revenueTrendChart'), { type: 'line', data: { labels: ['', '', '', '', '', ''], datasets: [{ data: monthlyRevenueData, borderColor: 'white', borderWidth: 2, fill: true, backgroundColor: 'rgba(255, 255, 255, 0.1)', tension: 0.4 }] }, options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false }, tooltip: { enabled: false } }, scales: { x: { display: false }, y: { display: false } }, elements: { point: { radius: 0 } } } });
-                            
+                            observer.unobserve(entry.target);
+                        }
+                        
+                        if (entry.target.hasAttribute('data-animate-value') && !entry.target.isAnimated) {
+                            entry.target.isAnimated = true;
+                            const isDecimal = entry.target.dataset.animateValue === 'true';
+                            const value = parseFloat(animatedValueEl.textContent);
+                            animateValue(animatedValueEl, 0, value, 1500, isDecimal);
                             observer.unobserve(entry.target);
                         }
 
@@ -661,8 +664,7 @@
                 });
             };
             const chartObserver = new IntersectionObserver(chartInitializer, { rootMargin: "0px", threshold: 0.1 });
-            document.querySelectorAll('[data-chart-id]').forEach(el => chartObserver.observe(el));
-            document.querySelectorAll('[data-animate-kpi]').forEach(el => chartObserver.observe(el));
+            document.querySelectorAll('[data-chart-id], [data-animate-kpi], [data-animate-value]').forEach(el => chartObserver.observe(el));
         });
     </script>
 </body>
