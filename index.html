@@ -10,34 +10,28 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
+        /* --- Animation & Global Styles --- */
         @keyframes sway {
-            0% {
-                transform: translateX(0) rotate(0);
-            }
-            100% {
-                transform: translateX(-2%) rotate(-0.5deg);
-            }
+            0% { transform: translateX(0) rotate(0); }
+            100% { transform: translateX(-2%) rotate(-0.5deg); }
         }
-
         body {
             font-family: 'Tajawal', sans-serif;
-            background-color: #f0f2f5; /* Light grey background for the whole page */
+            background-color: #f0f2f5;
         }
         .background-image-container {
             position: fixed;
             top: 0;
             bottom: 0;
-            width: 20%; /* Adjusted width */
+            width: 20%;
             z-index: -1;
             background-size: cover;
             background-position: center;
-            display: none; /* Hidden on mobile by default */
+            display: none;
             animation: sway 20s ease-in-out infinite alternate;
         }
-        @media (min-width: 1024px) { /* Show on lg screens and up */
-            .background-image-container {
-                display: block;
-            }
+        @media (min-width: 1024px) {
+            .background-image-container { display: block; }
         }
         #bg-left {
             left: 0;
@@ -46,16 +40,16 @@
         #bg-right {
             right: 0;
             background-image: url('https://images.unsplash.com/photo-1560493676-04071c5f467b?q=80&w=1974&auto=format&fit=crop');
-            transform: scaleX(-1); /* Flip the image horizontally */
-            animation-direction: alternate-reverse; /* Move in opposite direction */
+            transform: scaleX(-1);
+            animation-direction: alternate-reverse;
         }
 
+        /* --- Layout Containers --- */
         .main-content-area {
-            max-width: 1300px; /* Adjusted Max width for the content */
-            margin: 0 auto; /* Center the content */
+            max-width: 1300px;
+            margin: 0 auto;
             padding: 1rem;
         }
-
         .main-container {
              background-color: #f8fafc;
              padding: 1.5rem;
@@ -63,22 +57,15 @@
              box-shadow: 0 10px 30px rgba(0,0,0,0.1);
         }
         @media (min-width: 768px) {
-            .main-container {
-                padding: 2.5rem;
-            }
+            .main-container { padding: 2.5rem; }
         }
-        .chart-container {
-            position: relative;
-            height: 350px;
-            width: 100%;
-            max-width: 800px;
-            margin: auto;
-        }
+
+        /* --- KPI Card Styles --- */
         .kpi-card {
             background-color: #ffffff;
             border: 1px solid #e5e7eb;
             border-radius: 1rem;
-            padding: 1.5rem;
+            padding: 1.25rem;
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
             transition: transform 0.3s ease, box-shadow 0.3s ease;
             display: flex;
@@ -90,13 +77,38 @@
             box-shadow: 0 12px 40px 0 rgba(31, 38, 135, 0.15);
             cursor: pointer;
         }
+        .kpi-title {
+            font-size: 1.1rem; 
+            font-weight: 600;
+            color: #557A46;
+            margin-bottom: 0.5rem;
+        }
+        .kpi-value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: #285430;
+            line-height: 1.1;
+        }
+        .kpi-unit {
+            font-size: 1rem; 
+            font-weight: 500;
+            color: #8C7A6B;
+            margin-right: 0.35rem;
+        }
+        .kpi-card-warning {
+            background-color: #FFFBEB;
+            border-color: #FBBF24;
+        }
+        .kpi-card-warning .kpi-title { color: #92400E; }
+        .kpi-card-warning .kpi-value { color: #D97706; }
+        .kpi-card-warning .kpi-unit { color: #B45309; }
         
+        /* --- Trend Card Styles --- */
         .kpi-card-trend {
             background: linear-gradient(145deg, #2d6a4f 0%, #1b4332 100%);
             color: white;
             box-shadow: 0 10px 20px rgba(0,0,0,0.2), 0 6px 6px rgba(0,0,0,0.23);
         }
-
         .kpi-card-trend .kpi-title {
             color: rgba(255, 255, 255, 0.8);
             text-align: center;
@@ -104,17 +116,12 @@
         }
         .kpi-card-trend .kpi-value {
             color: white;
-            font-size: 2.5rem;
+            font-size: 2.25rem;
             text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
-        }
-        @media (min-width: 1024px) {
-            .kpi-card-trend .kpi-value {
-                font-size: 3rem;
-            }
         }
         .kpi-card-trend .kpi-unit {
             color: rgba(255, 255, 255, 0.7);
-            font-size: 1rem;
+            font-size: 0.9rem;
         }
         .kpi-card-trend .trend-indicator-wrapper {
             margin: 0.5rem auto 0;
@@ -122,17 +129,15 @@
             justify-content: center;
         }
         .kpi-card-trend .trend-indicator {
-            width: 70px;
-            height: 70px;
+            width: 60px; height: 60px;
             border-radius: 50%;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: 700;
         }
-
         .kpi-card-trend .trend-indicator.up {
             color: #4ade80; 
             background-color: rgba(74, 222, 128, 0.15);
@@ -143,48 +148,10 @@
             background-color: rgba(248, 113, 113, 0.15);
             border: 2px solid rgba(248, 113, 113, 0.5);
         }
+        .kpi-card-trend .trend-indicator svg { width: 1.25rem; height: 1.25rem; }
+        .sparkline-container { height: 50px; margin-top: auto; opacity: 0.7; }
 
-        .kpi-card-trend .trend-indicator svg {
-            width: 1.5rem;
-            height: 1.5rem;
-        }
-
-        .kpi-card-trend .sparkline-container {
-            opacity: 0.7;
-        }
-        
-        .kpi-title {
-            font-size: 1.1rem; 
-            font-weight: 500;
-            color: #557A46;
-        }
-        .kpi-value {
-            font-size: 2rem; 
-            font-weight: 800;
-            color: #285430;
-        }
-        @media (min-width: 640px) {
-             .kpi-value { font-size: 2.25rem; }
-        }
-        @media (min-width: 1024px) {
-             .kpi-value { font-size: 2.5rem; }
-        }
-        .kpi-unit {
-            font-size: 1rem; 
-            font-weight: 500;
-            color: #8C7A6B;
-            margin-right: 0.25rem;
-        }
-        
-        .sparkline-container {
-            height: 50px;
-            margin-top: auto;
-        }
-        @keyframes kpi-animate-entry {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-        
+        /* --- Section & Chart Styles --- */
         .section-title {
             font-size: 1.75rem; 
             font-weight: 700;
@@ -208,6 +175,13 @@
             color: #285430;
             margin-bottom: 1rem;
         }
+        .chart-container {
+            position: relative;
+            height: 350px;
+            width: 100%;
+            max-width: 800px;
+            margin: auto;
+        }
         .chart-context {
             text-align: center;
             font-size: 0.95rem;
@@ -217,124 +191,58 @@
             margin-left: auto;
             margin-right: auto;
         }
+        
+        /* --- Modal Styles --- */
         #details-modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.6);
-            z-index: 999;
-            display: none;
-            opacity: 0;
-            transition: opacity 0.3s ease;
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background-color: rgba(0, 0, 0, 0.6); z-index: 999;
+            display: none; opacity: 0; transition: opacity 0.3s ease;
             backdrop-filter: blur(5px);
         }
         #details-modal-container {
-            position: fixed;
-            top: 50%;
-            left: 50%;
+            position: fixed; top: 50%; left: 50%;
             transform: translate(-50%, -50%) scale(0.95);
-            background-color: #f9fafb;
-            border-radius: 1rem;
+            background-color: #f9fafb; border-radius: 1rem;
             box-shadow: 0 20px 25px -5px rgb(0 0 0 / 0.1), 0 8px 10px -6px rgb(0 0 0 / 0.1);
-            width: 90%;
-            max-width: 900px;
-            max-height: 90vh;
-            overflow: hidden;
-            display: none;
-            opacity: 0;
+            width: 90%; max-width: 900px; max-height: 90vh;
+            overflow: hidden; display: none; opacity: 0;
             transition: opacity 0.3s ease, transform 0.3s ease;
-            z-index: 1000;
-            display: flex;
-            flex-direction: column;
+            z-index: 1000; display: flex; flex-direction: column;
         }
-        .modal-header {
-            padding: 1rem 1.5rem;
-            border-bottom: 1px solid #e5e7eb;
-            flex-shrink: 0;
-        }
-        .modal-body {
-            padding: 1.5rem;
-            overflow-y: auto;
-            flex-grow: 1;
-        }
+        .modal-header { padding: 1rem 1.5rem; border-bottom: 1px solid #e5e7eb; flex-shrink: 0; }
+        .modal-body { padding: 1.5rem; overflow-y: auto; flex-grow: 1; }
         .modal-close-btn {
-            background-color: #e5e7eb;
-            color: #4b5563;
-            border-radius: 9999px;
-            width: 2rem;
-            height: 2rem;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 1.5rem;
-            line-height: 1;
-            transition: background-color 0.2s, color 0.2s;
+            background-color: #e5e7eb; color: #4b5563; border-radius: 9999px;
+            width: 2rem; height: 2rem; display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem; line-height: 1; transition: background-color 0.2s, color 0.2s;
         }
-        .modal-close-btn:hover {
-            background-color: #d1d5db;
-            color: #1f2937;
-        }
-        #details-modal-overlay.visible {
-            display: block;
-            opacity: 1;
-        }
-        #details-modal-container.visible {
-            display: flex;
-            opacity: 1;
-            transform: translate(-50%, -50%) scale(1);
-        }
-        .professional-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
+        .modal-close-btn:hover { background-color: #d1d5db; color: #1f2937; }
+        #details-modal-overlay.visible { display: block; opacity: 1; }
+        #details-modal-container.visible { display: flex; opacity: 1; transform: translate(-50%, -50%) scale(1); }
+        
+        /* --- Table & Badge Styles --- */
+        .professional-table { width: 100%; border-collapse: collapse; }
         .professional-table thead th {
-            background-color: #285430;
-            color: white;
-            padding: 0.75rem 1rem;
-            text-align: right;
-            font-weight: 600;
+            background-color: #285430; color: white; padding: 0.75rem 1rem;
+            text-align: right; font-weight: 600;
         }
         .professional-table tbody td {
-            padding: 0.75rem 1rem;
-            border-bottom: 1px solid #e5e7eb;
-            color: #374151;
+            padding: 0.75rem 1rem; border-bottom: 1px solid #e5e7eb; color: #374151;
         }
-        .professional-table tbody tr:nth-child(even) {
-            background-color: #f3f4f6;
-        }
-        .professional-table tbody tr:hover {
-            background-color: #e5e7eb;
-        }
+        .professional-table tbody tr:nth-child(even) { background-color: #f3f4f6; }
+        .professional-table tbody tr:hover { background-color: #e5e7eb; }
         .professional-table .icon {
-            display: inline-block;
-            vertical-align: middle;
-            margin-left: 8px;
-            width: 20px;
-            height: 20px;
+            display: inline-block; vertical-align: middle; margin-left: 8px;
+            width: 20px; height: 20px;
         }
-        .professional-table .amount {
-            font-weight: 600;
-        }
-        .professional-table .amount.overdue {
-            color: #c81e1e;
-        }
+        .professional-table .amount { font-weight: 600; }
+        .professional-table .amount.overdue { color: #c81e1e; }
         .status-badge {
-            padding: 0.25rem 0.75rem;
-            border-radius: 9999px;
-            font-weight: 600;
-            font-size: 0.8rem;
+            padding: 0.25rem 0.75rem; border-radius: 9999px;
+            font-weight: 600; font-size: 0.8rem;
         }
-        .status-badge.resolved {
-            background-color: #dcfce7;
-            color: #166534;
-        }
-        .status-badge.pending {
-            background-color: #fef9c3;
-            color: #854d0e;
-        }
-
+        .status-badge.resolved { background-color: #dcfce7; color: #166534; }
+        .status-badge.pending { background-color: #fef9c3; color: #854d0e; }
     </style>
 </head>
 <body class="antialiased">
@@ -361,46 +269,53 @@
                 <!-- Financial Vision Section -->
                 <section id="financial" class="mb-12">
                     <h2 class="section-title">💰 الرؤية المالية</h2>
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 mb-8 text-center">
-                        <div data-kpi-id="revenue" class="kpi-card kpi-card-interactive" data-animate-value="true">
-                            <h3 class="kpi-title" style="font-size: 1.25rem;">إجمالي الإيرادات</h3>
-                            <div><span class="kpi-value" style="font-size: 3.5rem; line-height: 1.2;">75.4</span><span class="kpi-unit" style="font-size: 1.25rem;">مليون</span></div>
+                    
+                    <!-- New Layout for Top Financial Cards -->
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 mb-8">
+                        <!-- Left Column: Stacked Cards -->
+                        <div class="flex flex-col gap-6 lg:gap-8">
+                            <div data-kpi-id="revenue" class="kpi-card kpi-card-interactive text-center flex-1" data-animate-value="true">
+                                <h3 class="kpi-title text-xl">إجمالي الإيرادات</h3>
+                                <div><span class="kpi-value text-4xl">75.4</span><span class="kpi-unit text-base">مليون</span></div>
+                            </div>
+                            <div data-kpi-id="dues-amount" class="kpi-card kpi-card-interactive text-center flex-1" data-animate-value="true">
+                                <h3 class="kpi-title text-xl">المستحقات المتأخرة</h3>
+                                <div><span class="kpi-value text-4xl" style="color: #c81e1e;">12.1</span><span class="kpi-unit text-base">مليون</span></div>
+                            </div>
                         </div>
                         
-                        <div class="kpi-card kpi-card-trend" data-animate-kpi>
-                            <h3 class="kpi-title">نمو الإيرادات الشهري</h3>
-                            <div class="text-center my-2">
-                                <span id="trend-kpi-value" class="kpi-value">0.0</span>
-                                <span class="kpi-unit">مليون</span>
+                        <!-- Right Column: Tall Trend Card -->
+                        <div class="kpi-card kpi-card-trend h-full" data-animate-kpi>
+                             <h3 class="kpi-title">نمو الإيرادات الشهري</h3>
+                            <div class="text-center my-auto">
+                                <span id="trend-kpi-value" class="kpi-value text-4xl">0.0</span>
+                                <span class="kpi-unit text-lg">مليون</span>
+                                <div class="trend-indicator-wrapper mt-4">
+                                    <div id="trend-indicator" class="trend-indicator !w-20 !h-20"></div>
+                                </div>
                             </div>
-                            <div class="trend-indicator-wrapper">
-                                <div id="trend-indicator" class="trend-indicator"></div>
-                            </div>
-                            <div class="sparkline-container">
+                            <div class="sparkline-container mt-auto">
                                 <canvas id="revenueTrendChart"></canvas>
                             </div>
                         </div>
-                        
-                        <div data-kpi-id="dues-amount" class="kpi-card kpi-card-interactive" data-animate-value="true">
-                            <h3 class="kpi-title" style="font-size: 1.25rem;">المستحقات المتأخرة</h3>
-                            <div><span class="kpi-value" style="color: #c81e1e; font-size: 3.5rem; line-height: 1.2;">12.1</span><span class="kpi-unit" style="font-size: 1.25rem;">مليون</span></div>
-                        </div>
+                    </div>
 
-                        <div data-kpi-id="overdue" class="kpi-card kpi-card-interactive" style="background-color: #FFFBEB; border: 1px solid #FBBF24;" data-animate-value="false">
-                            <h3 class="kpi-title" style="color: #92400E;">أقساط متأخرة (عدد)</h3>
-                            <div><span class="kpi-value" style="color: #D97706;">245</span><span class="kpi-unit" style="color: #B45309;">قسط</span></div>
+                    <!-- Grid for the rest of the financial cards -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6 lg:gap-8 mb-8 text-center">
+                        <div data-kpi-id="overdue" class="kpi-card kpi-card-interactive kpi-card-warning" data-animate-value="false">
+                            <h3 class="kpi-title">أقساط متأخرة (عدد)</h3>
+                            <div><span class="kpi-value">245</span><span class="kpi-unit">قسط</span></div>
                         </div>
-
                          <div class="kpi-card">
                             <h3 class="kpi-title">أعلى مركز تحصيلاً</h3>
                             <div><span id="top-revenue-center" class="kpi-value text-green-600"></span></div>
                         </div>
-
                          <div class="kpi-card" data-animate-value="true">
                             <h3 class="kpi-title">نسبة التحصيل</h3>
                             <div><span class="kpi-value">86.2</span><span class="kpi-unit">%</span></div>
                         </div>
                     </div>
+
                      <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
                          <div class="chart-card" data-chart-id="overdueInstallmentsChart">
                             <h3 class="chart-title">توزيع الأقساط المتأخرة (آخر 6 شهور)</h3>
@@ -442,9 +357,9 @@
                             <h3 class="kpi-title">أراضٍ تم سحبها</h3>
                              <div><span class="kpi-value">58</span><span class="kpi-unit">قطعة</span></div>
                         </div>
-                        <div data-kpi-id="late-investors" class="kpi-card kpi-card-interactive" style="background-color: #FFFBEB; border: 1px solid #FBBF24;" data-animate-value="false">
-                            <h3 class="kpi-title" style="color: #92400E;">مستثمرون متأخرون</h3>
-                             <div><span class="kpi-value" style="color: #D97706;">97</span><span class="kpi-unit" style="color: #B45309;">مستثمر</span></div>
+                        <div data-kpi-id="late-investors" class="kpi-card kpi-card-interactive kpi-card-warning" data-animate-value="false">
+                            <h3 class="kpi-title">مستثمرون متأخرون</h3>
+                             <div><span class="kpi-value">97</span><span class="kpi-unit">مستثمر</span></div>
                         </div>
                     </div>
                 </section>
@@ -478,7 +393,7 @@
                     <h2 class="section-title">⏳ مؤشرات زمنية وإدارية</h2>
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-8 max-w-4xl mx-auto">
                         <div class="kpi-card text-center" data-animate-value="false"><h3 class="kpi-title">متوسط زمن القرار</h3><div><span class="kpi-value">21</span><span class="kpi-unit">يوم</span></div></div>
-                        <div data-kpi-id="delayed-requests" class="kpi-card kpi-card-interactive text-center" style="background-color: #FFFBEB; border: 1px solid #FBBF24;" data-animate-value="false"><h3 class="kpi-title" style="color: #92400E;">طلبات متأخرة</h3><div><span class="kpi-value">35</span><span class="kpi-unit" style="color: #B45309;">طلب</span></div></div>
+                        <div data-kpi-id="delayed-requests" class="kpi-card kpi-card-interactive text-center kpi-card-warning" data-animate-value="false"><h3 class="kpi-title">طلبات متأخرة</h3><div><span class="kpi-value">35</span><span class="kpi-unit">طلب</span></div></div>
                     </div>
                 </section>
                 <section id="complaints" class="mb-12">
@@ -492,9 +407,9 @@
                             <h3 class="kpi-title">شكاوى تم حلها</h3>
                             <div><span class="kpi-value">2</span><span class="kpi-unit">شكوى</span></div>
                         </div>
-                        <div data-kpi-id="pending-complaints" class="kpi-card kpi-card-interactive" style="background-color: #FFFBEB; border: 1px solid #FBBF24;" data-animate-value="false">
-                            <h3 class="kpi-title" style="color: #92400E;">قيد المراجعة</h3>
-                            <div><span class="kpi-value">2</span><span class="kpi-unit" style="color: #B45309;">شكوى</span></div>
+                        <div data-kpi-id="pending-complaints" class="kpi-card kpi-card-interactive kpi-card-warning" data-animate-value="false">
+                            <h3 class="kpi-title">قيد المراجعة</h3>
+                            <div><span class="kpi-value">2</span><span class="kpi-unit">شكوى</span></div>
                         </div>
                     </div>
                     <div class="chart-card" data-chart-id="complaintsChart">
@@ -506,7 +421,7 @@
             </main>
     
             <footer class="text-center mt-12 pt-8 border-t border-gray-300">
-                <p class="text-sm text-gray-600 font-light">&copy; 2025 صندوق استصلاح الأراضي، محافظة الوادي الجديد. جميع الحقوق محفوظة.</p>
+                <p class="text-sm text-gray-600 font-light">&copy; 2024 صندوق استصلاح الأراضي، محافظة الوادي الجديد. جميع الحقوق محفوظة.</p>
             </footer>
         </div>
     </div>
@@ -563,10 +478,10 @@
                 switch (type) {
                     case 'revenue': title = 'تفاصيل الإيرادات المحصلة'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>${icons.money}المبلغ</th><th>${icons.calendar}التاريخ</th>`, mockData.revenue.map(item => `<tr><td>${item.name}</td><td class="amount">${item.amount}</td><td>${item.date}</td></tr>`).join('')); break;
                     case 'dues-amount': title = 'تفاصيل المستحقات المتأخرة'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>${icons.money}المبلغ المستحق</th><th>${icons.calendar}تاريخ الاستحقاق</th>`, mockData.duesAmount.map(item => `<tr><td>${item.name}</td><td class="amount overdue">${item.amount}</td><td>${item.dueDate}</td></tr>`).join('')); break;
-                    case 'overdue': title = 'تفاصيل الأقساط المتأخرة'; html = `<h4 class="text-lg font-semibold text-gray-700 mb-3">التوزيع الشهري</h4><div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">${mockData.overdue.monthlyDistribution.map(item => `<div class="bg-amber-100 p-3 rounded-lg text-center border border-amber-200"><div class="font-bold text-amber-800">${item.month}</div><div class="text-2xl font-extrabold text-amber-600">${item.count}</div></div>`).join('')}</div><h4 class="text-lg font-semibold text-gray-700 mb-3 mt-6">عينة من الأقساط</h4>` + tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>${icons.hashtag}القسط</th><th>${icons.money}المبلغ</th><th>${icons.calendar}تاريخ الاستحقاق</th>`, mockData.overdue.details.map(item => `<tr><td>${item.name}</td><td class="text-center">${item.installment}</td><td class="amount overdue">${item.amount}</td><td>${item.dueDate}</td></tr>`).join('')); break;
+                    case 'overdue': title = 'تفاصيل الأقساط المتأخرة'; html = `<h4 class="text-lg font-semibold text-gray-700 mb-3">التوزيع الشهري</h4><div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">${mockData.overdue.monthlyDistribution.map(item => `<div class="bg-amber-100 p-3 rounded-lg text-center border border-amber-200"><div class="font-bold text-amber-800">${item.month}</div><div class="text-2xl font-extrabold text-amber-600">${item.count}</div></div>`).join('')}</div><h4 class="text-lg font-semibold text-gray-700 mb-3 mt-6">عينة من الأقساط</h4>` + tableTemplate(`<th>${icons.user}اسم المستثمر</th><th># القسط</th><th>${icons.money}المبلغ</th><th>${icons.calendar}تاريخ الاستحقاق</th>`, mockData.overdue.details.map(item => `<tr><td>${item.name}</td><td class="text-center">${item.installment}</td><td class="amount overdue">${item.amount}</td><td>${item.dueDate}</td></tr>`).join('')); break;
                     case 'completed-projects': title = 'المشاريع المنفذة'; html = tableTemplate(`<th>اسم المشروع</th><th>المستثمر</th><th>تاريخ الاكتمال</th><th>المساحة</th>`, mockData.completedProjects.map(item => `<tr><td>${item.name}</td><td>${item.investor}</td><td>${item.date}</td><td>${item.area}</td></tr>`).join('')); break;
                     case 'withdrawn-lands': title = 'الأراضي المسحوبة'; html = tableTemplate(`<th>المستثمر</th><th>رقم القطعة</th><th>سبب السحب</th><th>التاريخ</th>`, mockData.withdrawnLands.map(item => `<tr><td>${item.investor}</td><td>${item.landId}</td><td class="amount overdue">${item.reason}</td><td>${item.date}</td></tr>`).join('')); break;
-                    case 'late-investors': title = 'المستثمرون المتأخرون في السداد'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>${icons.money}المبلغ المتأخر</th><th>تاريخ آخر سداد</th><th>${icons.phone}رقم الهاتف</th>`, mockData.lateInvestors.map(item => `<tr><td>${item.name}</td><td class="amount overdue">${item.overdueAmount}</td><td>${item.lastPayment}</td><td>${item.phone}</td></tr>`).join('')); break;
+                    case 'late-investors': title = 'المستثمرون المتأخرون في السداد'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>${icons.money}المبلغ المتأخر</th><th>تاريخ آخر سداد</th><th>رقم الهاتف</th>`, mockData.lateInvestors.map(item => `<tr><td>${item.name}</td><td class="amount overdue">${item.overdueAmount}</td><td>${item.lastPayment}</td><td>${item.phone}</td></tr>`).join('')); break;
                     case 'registered-investors': title = 'قائمة المستثمرين المسجلين'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>تاريخ الانضمام</th><th>الحالة</th>`, mockData.registeredInvestors.map(item => `<tr><td>${item.name}</td><td>${item.joinDate}</td><td><span class="px-2 py-1 font-semibold leading-tight ${item.status === 'نشط' ? 'text-green-700 bg-green-100' : 'text-blue-700 bg-blue-100'} rounded-full">${item.status}</span></td></tr>`).join('')); break;
                     case 'active-investors': title = 'قائمة المستثمرين النشطين'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>آخر نشاط</th><th>مشاريع مفتوحة</th>`, mockData.activeInvestors.map(item => `<tr><td>${item.name}</td><td>${item.lastActivity}</td><td class="text-center">${item.openProjects}</td></tr>`).join('')); break;
                     case 'delayed-requests': title = 'الطلبات المتأخرة عن الجدول الزمني'; html = tableTemplate(`<th>رقم الطلب</th><th>نوع الطلب</th><th>تاريخ التقديم</th><th>أيام التأخير</th>`, mockData.delayedRequests.map(item => `<tr><td>${item.id}</td><td>${item.type}</td><td>${item.submitted}</td><td class="text-center amount overdue">${item.daysDelayed}</td></tr>`).join('')); break;
