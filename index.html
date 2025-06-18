@@ -254,14 +254,16 @@
             <!-- Header Section -->
             <header class="text-center mb-8 md:mb-12">
                 <div class="flex flex-col sm:flex-row justify-center items-center w-full mb-4 gap-4">
-                     <img src="photo/logo gov.gif" alt="شعار 1" class="h-24 md:h-32 w-auto object-contain">
+                    <!-- Updated Image Source -->
+                    <img src="https://placehold.co/128x128/FFFFFF/000000?text=شعار+١" alt="شعار 1" class="h-24 md:h-32 w-auto object-contain">
                     <div class="flex-grow mx-4">
-                         <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-800">
+                        <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-800">
                             لوحة مؤشرات الأداء
                         </h1>
                         <p class="text-base md:text-lg text-gray-600 mt-1">صندوق استصلاح الأراضي</p>
                     </div>
-                     <img src="photo/logo box.png" alt="شعار 2" class="h-24 md:h-32 w-auto object-contain">
+                    <!-- Updated Image Source -->
+                    <img src="https://placehold.co/128x128/FFFFFF/000000?text=شعار+٢" alt="شعار 2" class="h-24 md:h-32 w-auto object-contain">
                 </div>
             </header>
 
@@ -317,11 +319,11 @@
                     </div>
 
                      <div class="grid grid-cols-1 xl:grid-cols-2 gap-8">
-                         <div class="chart-card" data-chart-id="overdueInstallmentsChart">
+                          <div class="chart-card" data-chart-id="overdueInstallmentsChart">
                             <h3 class="chart-title">توزيع الأقساط المتأخرة (آخر 6 شهور)</h3>
                             <div class="chart-container"><canvas id="overdueInstallmentsChart"></canvas></div>
                         </div>
-                         <div class="chart-card" data-chart-id="revenueByCenterChart">
+                          <div class="chart-card" data-chart-id="revenueByCenterChart">
                             <h3 class="chart-title">توزيع الإيرادات حسب المراكز</h3>
                             <div class="chart-container"><canvas id="revenueByCenterChart"></canvas></div>
                         </div>
@@ -437,9 +439,16 @@
         const mockData = {
             revenue: [{ name: 'شركة النيل الزراعية', amount: '500,000 ج.م', date: '2024-05-15', method: 'تحويل بنكي', installment: 3 },{ name: 'مزارع الوادي الجديد', amount: '250,000 ج.م', date: '2024-05-12', method: 'شيك', installment: 1 },],
             duesAmount: [ { name: 'مستثمر الأمل', amount: '120,000 ج.م', dueDate: '2024-04-30' }, { name: 'أراضي الخير', amount: '85,000 ج.م', dueDate: '2024-05-10' }, { name: 'الرمال الذهبية', amount: '210,000 ج.م', dueDate: '2024-03-20' } ],
-            overdue: { monthlyDistribution: [{ month: 'يناير', count: 45 }, { month: 'فبراير', count: 60 }, { month: 'مارس', count: 55 },{ month: 'أبريل', count: 75 }, { month: 'مايو', count: 65 }, { month: 'يونيو', count: 85 }], details: [{ name: 'شركة الصحراء الخضراء', installment: 2, amount: '75,000 ج.م', dueDate: '2024-06-01' },{ name: 'مستثمر المستقبل', installment: 4, amount: '90,000 ج.м', dueDate: '2024-06-05' },] },
+            overdue: { 
+                monthlyDistribution: [{ month: 'يناير', count: 45 }, { month: 'فبراير', count: 60 }, { month: 'مارس', count: 55 },{ month: 'أبريل', count: 75 }, { month: 'مايو', count: 65 }, { month: 'يونيو', count: 85 }],
+                yearlyDistribution: [{ year: '2022', count: 120 }, { year: '2023', count: 210 }, { year: '2024', count: 95 }],
+                details: [{ name: 'شركة الصحراء الخضراء', installment: 2, amount: '75,000 ج.م', dueDate: '2024-06-01' },{ name: 'مستثمر المستقبل', installment: 4, amount: '90,000 ج.м', dueDate: '2024-06-05' },] 
+            },
             completedProjects: [{ name: 'مشروع القمح الذهبي', investor: 'شركة النيل الزراعية', date: '2023-12-20', area: '500 فدان' },{ name: 'مزارع الزيتون المبارك', investor: 'استثمار الواحات', date: '2024-02-11', area: '1200 فدان' },],
-            withdrawnLands: [{ investor: 'شركة الرمال المتحركة', landId: 'ق-884-ب', reason: 'عدم الجدية', date: '2024-03-01' },{ investor: 'مستثمر غير معروف', landId: 'س-101-ج', reason: 'مخالفة شروط التعاقد', date: '2024-05-18' },],
+            withdrawnLands: [
+                { investor: 'شركة الرمال المتحركة', landId: 'ق-884-ب', reason: 'عدم الجدية', date: '2024-03-01', withdrawalRecordDate: '2024-02-20', decisionNumber: '155', decisionAuthority: 'مجلس الإدارة', withdrawalDecision: 'سحب نهائي' },
+                { investor: 'مستثمر غير معروف', landId: 'س-101-ج', reason: 'مخالفة شروط التعاقد', date: '2024-05-18', withdrawalRecordDate: '2024-05-10', decisionNumber: '189', decisionAuthority: 'السيد المحافظ', withdrawalDecision: 'إنذار بالسحب' },
+            ],
             lateInvestors: [{ name: 'مستثمر الأمل', overdueAmount: '120,000 ج.م', lastPayment: '2023-11-01', phone: '01001234567' },{ name: 'أراضي الخير', overdueAmount: '85,000 ج.م', lastPayment: '2024-01-15', phone: '01223456789' },],
             registeredInvestors: [{ name: 'شركة الوادي الجديد القابضة', joinDate: '2022-01-15', status: 'نشط' },{ name: 'مجموعة الأفق الزراعية', joinDate: '2022-03-10', status: 'نشط' },{ name: 'مستثمر فردي', joinDate: '2024-06-01', status: 'جديد' },],
             activeInvestors: [{ name: 'شركة الوادي الجديد القابضة', lastActivity: '2024-06-12', openProjects: 3 },{ name: 'مجموعة الأفق الزراعية', lastActivity: '2024-06-10', openProjects: 1 },],
@@ -478,9 +487,52 @@
                 switch (type) {
                     case 'revenue': title = 'تفاصيل الإيرادات المحصلة'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>${icons.money}المبلغ</th><th>${icons.calendar}التاريخ</th>`, mockData.revenue.map(item => `<tr><td>${item.name}</td><td class="amount">${item.amount}</td><td>${item.date}</td></tr>`).join('')); break;
                     case 'dues-amount': title = 'تفاصيل المستحقات المتأخرة'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>${icons.money}المبلغ المستحق</th><th>${icons.calendar}تاريخ الاستحقاق</th>`, mockData.duesAmount.map(item => `<tr><td>${item.name}</td><td class="amount overdue">${item.amount}</td><td>${item.dueDate}</td></tr>`).join('')); break;
-                    case 'overdue': title = 'تفاصيل الأقساط المتأخرة'; html = `<h4 class="text-lg font-semibold text-gray-700 mb-3">التوزيع الشهري</h4><div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-6">${mockData.overdue.monthlyDistribution.map(item => `<div class="bg-amber-100 p-3 rounded-lg text-center border border-amber-200"><div class="font-bold text-amber-800">${item.month}</div><div class="text-2xl font-extrabold text-amber-600">${item.count}</div></div>`).join('')}</div><h4 class="text-lg font-semibold text-gray-700 mb-3 mt-6">عينة من الأقساط</h4>` + tableTemplate(`<th>${icons.user}اسم المستثمر</th><th># القسط</th><th>${icons.money}المبلغ</th><th>${icons.calendar}تاريخ الاستحقاق</th>`, mockData.overdue.details.map(item => `<tr><td>${item.name}</td><td class="text-center">${item.installment}</td><td class="amount overdue">${item.amount}</td><td>${item.dueDate}</td></tr>`).join('')); break;
+                    case 'overdue': 
+                        title = 'تفاصيل الأقساط المتأخرة'; 
+                        html = `
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-700 mb-3">التوزيع الشهري</h4>
+                                <div class="grid grid-cols-3 gap-4">
+                                    ${mockData.overdue.monthlyDistribution.map(item => `
+                                        <div class="bg-amber-100 p-3 rounded-lg text-center border border-amber-200">
+                                            <div class="font-bold text-amber-800">${item.month}</div>
+                                            <div class="text-2xl font-extrabold text-amber-600">${item.count}</div>
+                                        </div>`).join('')}
+                                </div>
+                            </div>
+                            <div>
+                                <h4 class="text-lg font-semibold text-gray-700 mb-3">التوزيع السنوي</h4>
+                                <div class="grid grid-cols-3 gap-4">
+                                    ${mockData.overdue.yearlyDistribution.map(item => `
+                                        <div class="bg-sky-100 p-3 rounded-lg text-center border border-sky-200">
+                                            <div class="font-bold text-sky-800">${item.year}</div>
+                                            <div class="text-2xl font-extrabold text-sky-600">${item.count}</div>
+                                        </div>`).join('')}
+                                </div>
+                            </div>
+                        </div>
+                        <h4 class="text-lg font-semibold text-gray-700 mb-3 mt-6">عينة من الأقساط</h4>` + 
+                        tableTemplate(`<th>${icons.user}اسم المستثمر</th><th># القسط</th><th>${icons.money}المبلغ</th><th>${icons.calendar}تاريخ الاستحقاق</th>`, mockData.overdue.details.map(item => `<tr><td>${item.name}</td><td class="text-center">${item.installment}</td><td class="amount overdue">${item.amount}</td><td>${item.dueDate}</td></tr>`).join('')); 
+                        break;
                     case 'completed-projects': title = 'المشاريع المنفذة'; html = tableTemplate(`<th>اسم المشروع</th><th>المستثمر</th><th>تاريخ الاكتمال</th><th>المساحة</th>`, mockData.completedProjects.map(item => `<tr><td>${item.name}</td><td>${item.investor}</td><td>${item.date}</td><td>${item.area}</td></tr>`).join('')); break;
-                    case 'withdrawn-lands': title = 'الأراضي المسحوبة'; html = tableTemplate(`<th>المستثمر</th><th>رقم القطعة</th><th>سبب السحب</th><th>التاريخ</th>`, mockData.withdrawnLands.map(item => `<tr><td>${item.investor}</td><td>${item.landId}</td><td class="amount overdue">${item.reason}</td><td>${item.date}</td></tr>`).join('')); break;
+                    case 'withdrawn-lands': 
+                        title = 'الأراضي المسحوبة'; 
+                        html = tableTemplate(
+                            `<th>المستثمر</th><th>رقم القطعة</th><th>سبب السحب</th><th>تاريخ محضر السحب</th><th>رقم القرار</th><th>جهة القرار</th><th>قرار السحب</th>`, 
+                            mockData.withdrawnLands.map(item => 
+                                `<tr>
+                                    <td>${item.investor}</td>
+                                    <td>${item.landId}</td>
+                                    <td class="amount overdue">${item.reason}</td>
+                                    <td>${item.withdrawalRecordDate}</td>
+                                    <td>${item.decisionNumber}</td>
+                                    <td>${item.decisionAuthority}</td>
+                                    <td>${item.withdrawalDecision}</td>
+                                </tr>`
+                            ).join('')
+                        ); 
+                        break;
                     case 'late-investors': title = 'المستثمرون المتأخرون في السداد'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>${icons.money}المبلغ المتأخر</th><th>تاريخ آخر سداد</th><th>رقم الهاتف</th>`, mockData.lateInvestors.map(item => `<tr><td>${item.name}</td><td class="amount overdue">${item.overdueAmount}</td><td>${item.lastPayment}</td><td>${item.phone}</td></tr>`).join('')); break;
                     case 'registered-investors': title = 'قائمة المستثمرين المسجلين'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>تاريخ الانضمام</th><th>الحالة</th>`, mockData.registeredInvestors.map(item => `<tr><td>${item.name}</td><td>${item.joinDate}</td><td><span class="px-2 py-1 font-semibold leading-tight ${item.status === 'نشط' ? 'text-green-700 bg-green-100' : 'text-blue-700 bg-blue-100'} rounded-full">${item.status}</span></td></tr>`).join('')); break;
                     case 'active-investors': title = 'قائمة المستثمرين النشطين'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>آخر نشاط</th><th>مشاريع مفتوحة</th>`, mockData.activeInvestors.map(item => `<tr><td>${item.name}</td><td>${item.lastActivity}</td><td class="text-center">${item.openProjects}</td></tr>`).join('')); break;
@@ -563,13 +615,13 @@
 
                         if (chartId && !entry.target.chart) {
                              switch(chartId) {
-                                case 'overdueInstallmentsChart': entry.target.chart = new Chart(document.getElementById('overdueInstallmentsChart'), { type: 'bar', data: { labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'], datasets: [{ label: 'عدد الأقساط المتأخرة', data: [45, 60, 55, 75, 65, 85], backgroundColor: chartColors.secondary, borderColor: chartColors.primary, borderWidth: 1, borderRadius: 5 }] }, options: { ...tooltipConfig, scales: { y: { beginAtZero: true, ticks: { font: { family: 'Tajawal' } } }, x: { ticks: { font: { family: 'Tajawal' } } } } } }); break;
-                                case 'revenueByCenterChart': entry.target.chart = new Chart(document.getElementById('revenueByCenterChart'), { type: 'bar', data: { labels: mockData.centerRevenue.map(c => c.name), datasets: [{ label: 'الإيرادات بالمليون', data: mockData.centerRevenue.map(c => c.revenue), backgroundColor: [chartColors.primary, chartColors.secondary, chartColors.light, chartColors.accent, '#A47E3B'], borderWidth: 0, borderRadius: 5 }] }, options: { ...tooltipConfig, indexAxis: 'y', plugins: { ...tooltipConfig.plugins, legend: { display: false } }, scales: { y: { ticks: { font: { family: 'Tajawal' } } }, x: { ticks: { font: { family: 'Tajawal' } } } } } }); break;
-                                case 'landTypeChart': entry.target.chart = new Chart(document.getElementById('landTypeChart'), { type: 'doughnut', data: { labels: ['أراضٍ مطروحة', 'أراضٍ مقترحة'], datasets: [{ data: [68, 32], backgroundColor: [chartColors.primary, chartColors.light], borderColor: '#ffffff', borderWidth: 4 }] }, options: { ...tooltipConfig, plugins: { ...tooltipConfig.plugins, legend: { position: 'bottom', ...tooltipConfig.plugins.legend } } } }); break;
-                                case 'investorDistributionChart': entry.target.chart = new Chart(document.getElementById('investorDistributionChart'), { type: 'bar', data: { labels: ['أقل من 1م', '1-5م', '5-10م', 'أكثر من 10م'], datasets: [{ label: 'عدد المستثمرين', data: [110, 65, 32, 8], backgroundColor: [chartColors.light, chartColors.secondary, chartColors.primary, chartColors.accent], borderWidth: 0, borderRadius: 5 }] }, options: { ...tooltipConfig, plugins: { ...tooltipConfig.plugins, legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { font: { family: 'Tajawal' } } }, x: { ticks: { font: { family: 'Tajawal' } } } } } }); break;
-                                case 'complaintsChart': const resolvedCount = mockData.complaints.filter(c => c.status === 'مغلقة').length; const pendingCount = mockData.complaints.filter(c => c.status === 'قيد المراجعة').length; entry.target.chart = new Chart(document.getElementById('complaintsChart'), { type: 'bar', data: { labels: ['حالة الشكاوى'], datasets: [{ label: 'مغلقة', data: [resolvedCount], backgroundColor: chartColors.secondary, borderRadius: 5 }, { label: 'مفتوحة', data: [pendingCount], backgroundColor: chartColors.danger, borderRadius: 5 }] }, options: { ...tooltipConfig, indexAxis: 'y', scales: { x: { stacked: true, ticks: { callback: (v) => v, font: { family: 'Tajawal' } } }, y: { stacked: true, ticks: { font: { family: 'Tajawal' } } } } } }); break;
-                            }
-                            observer.unobserve(entry.target);
+                                 case 'overdueInstallmentsChart': entry.target.chart = new Chart(document.getElementById('overdueInstallmentsChart'), { type: 'bar', data: { labels: ['يناير', 'فبراير', 'مارس', 'أبريل', 'مايو', 'يونيو'], datasets: [{ label: 'عدد الأقساط المتأخرة', data: [45, 60, 55, 75, 65, 85], backgroundColor: chartColors.secondary, borderColor: chartColors.primary, borderWidth: 1, borderRadius: 5 }] }, options: { ...tooltipConfig, scales: { y: { beginAtZero: true, ticks: { font: { family: 'Tajawal' } } }, x: { ticks: { font: { family: 'Tajawal' } } } } } }); break;
+                                 case 'revenueByCenterChart': entry.target.chart = new Chart(document.getElementById('revenueByCenterChart'), { type: 'bar', data: { labels: mockData.centerRevenue.map(c => c.name), datasets: [{ label: 'الإيرادات بالمليون', data: mockData.centerRevenue.map(c => c.revenue), backgroundColor: [chartColors.primary, chartColors.secondary, chartColors.light, chartColors.accent, '#A47E3B'], borderWidth: 0, borderRadius: 5 }] }, options: { ...tooltipConfig, indexAxis: 'y', plugins: { ...tooltipConfig.plugins, legend: { display: false } }, scales: { y: { ticks: { font: { family: 'Tajawal' } } }, x: { ticks: { font: { family: 'Tajawal' } } } } } }); break;
+                                 case 'landTypeChart': entry.target.chart = new Chart(document.getElementById('landTypeChart'), { type: 'doughnut', data: { labels: ['أراضٍ مطروحة', 'أراضٍ مقترحة'], datasets: [{ data: [68, 32], backgroundColor: [chartColors.primary, chartColors.light], borderColor: '#ffffff', borderWidth: 4 }] }, options: { ...tooltipConfig, plugins: { ...tooltipConfig.plugins, legend: { position: 'bottom', ...tooltipConfig.plugins.legend } } } }); break;
+                                 case 'investorDistributionChart': entry.target.chart = new Chart(document.getElementById('investorDistributionChart'), { type: 'bar', data: { labels: ['أقل من 1م', '1-5م', '5-10م', 'أكثر من 10م'], datasets: [{ label: 'عدد المستثمرين', data: [110, 65, 32, 8], backgroundColor: [chartColors.light, chartColors.secondary, chartColors.primary, chartColors.accent], borderWidth: 0, borderRadius: 5 }] }, options: { ...tooltipConfig, plugins: { ...tooltipConfig.plugins, legend: { display: false } }, scales: { y: { beginAtZero: true, ticks: { font: { family: 'Tajawal' } } }, x: { ticks: { font: { family: 'Tajawal' } } } } } }); break;
+                                 case 'complaintsChart': const resolvedCount = mockData.complaints.filter(c => c.status === 'مغلقة').length; const pendingCount = mockData.complaints.filter(c => c.status === 'قيد المراجعة').length; entry.target.chart = new Chart(document.getElementById('complaintsChart'), { type: 'bar', data: { labels: ['حالة الشكاوى'], datasets: [{ label: 'مغلقة', data: [resolvedCount], backgroundColor: chartColors.secondary, borderRadius: 5 }, { label: 'مفتوحة', data: [pendingCount], backgroundColor: chartColors.danger, borderRadius: 5 }] }, options: { ...tooltipConfig, indexAxis: 'y', scales: { x: { stacked: true, ticks: { callback: (v) => v, font: { family: 'Tajawal' } } }, y: { stacked: true, ticks: { font: { family: 'Tajawal' } } } } } }); break;
+                             }
+                             observer.unobserve(entry.target);
                         }
                     }
                 });
