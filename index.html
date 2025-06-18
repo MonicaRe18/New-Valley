@@ -255,7 +255,7 @@
             <header class="text-center mb-8 md:mb-12">
                 <div class="flex flex-col sm:flex-row justify-center items-center w-full mb-4 gap-4">
                     <!-- Updated Image Source -->
-                    <img src="photo/logo box.png" alt="logo box" class="h-24 md:h-32 w-auto object-contain">
+                    <img src="photo/logo gov.gif" alt="logo gov" class="h-24 md:h-32 w-auto object-contain">
                     <div class="flex-grow mx-4">
                         <h1 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold text-gray-800">
                             لوحة مؤشرات الأداء
@@ -263,7 +263,7 @@
                         <p class="text-base md:text-lg text-gray-600 mt-1">صندوق استصلاح الأراضي</p>
                     </div>
                     <!-- Updated Image Source -->
-                    <img src="photo/logo gov.gif" alt="logo gov" class="h-24 md:h-32 w-auto object-contain">
+                    <img src="photo/logo box.png" alt="logo box" class="h-24 md:h-32 w-auto object-contain">
                 </div>
             </header>
 
@@ -437,7 +437,11 @@
 
     <script defer>
         const mockData = {
-            revenue: [{ name: 'شركة النيل الزراعية', amount: '500,000 ج.م', date: '2024-05-15', method: 'تحويل بنكي', installment: 3 },{ name: 'مزارع الوادي الجديد', amount: '250,000 ج.م', date: '2024-05-12', method: 'شيك', installment: 1 },],
+            revenue: [
+                { name: 'شركة النيل الزراعية', amount: '500,000', currency: 'ج.م', date: '2024-05-15', method: 'تحويل بنكي', installment: 3 },
+                { name: 'مزارع الوادي الجديد', amount: '250,000', currency: 'ج.م', date: '2024-05-12', method: 'شيك', installment: 1 },
+                { name: 'استثمارات الواحة الخضراء', amount: '16,400', currency: '$', date: '2024-05-11', method: 'تحويل بنكي', installment: 5 }
+            ],
             duesAmount: [ { name: 'مستثمر الأمل', amount: '120,000 ج.م', dueDate: '2024-04-30' }, { name: 'أراضي الخير', amount: '85,000 ج.م', dueDate: '2024-05-10' }, { name: 'الرمال الذهبية', amount: '210,000 ج.م', dueDate: '2024-03-20' } ],
             overdue: { 
                 monthlyDistribution: [{ month: 'يناير', count: 45 }, { month: 'فبراير', count: 60 }, { month: 'مارس', count: 55 },{ month: 'أبريل', count: 75 }, { month: 'مايو', count: 65 }, { month: 'يونيو', count: 85 }],
@@ -485,14 +489,26 @@
                 const tableTemplate = (headers, rows) => `<div class="overflow-x-auto"><table class="professional-table"><thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table></div>`;
                 
                 switch (type) {
-                    case 'revenue': title = 'تفاصيل الإيرادات المحصلة'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>${icons.money}المبلغ</th><th>${icons.calendar}التاريخ</th>`, mockData.revenue.map(item => `<tr><td>${item.name}</td><td class="amount">${item.amount}</td><td>${item.date}</td></tr>`).join('')); break;
+                    case 'revenue': 
+                        title = 'تفاصيل الإيرادات المحصلة'; 
+                        html = tableTemplate(
+                            `<th>${icons.user}اسم المستثمر</th><th>${icons.money}المبلغ</th><th>${icons.calendar}التاريخ</th>`, 
+                            mockData.revenue.map(item => 
+                                `<tr>
+                                    <td>${item.name}</td>
+                                    <td class="amount">${item.amount} ${item.currency}</td>
+                                    <td>${item.date}</td>
+                                </tr>`
+                            ).join('')
+                        ); 
+                        break;
                     case 'dues-amount': title = 'تفاصيل المستحقات المتأخرة'; html = tableTemplate(`<th>${icons.user}اسم المستثمر</th><th>${icons.money}المبلغ المستحق</th><th>${icons.calendar}تاريخ الاستحقاق</th>`, mockData.duesAmount.map(item => `<tr><td>${item.name}</td><td class="amount overdue">${item.amount}</td><td>${item.dueDate}</td></tr>`).join('')); break;
                     case 'overdue': 
                         title = 'تفاصيل الأقساط المتأخرة'; 
                         html = `
                         <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-6">
                             <div>
-                                <h4 class="text-lg font-semibold text-gray-700 mb-3">التوزيع الشهري</h4>
+                                <h4 class="text-lg font-semibold text-gray-700 mb-3">التوزيع الشهري للسنه الحالية</h4>
                                 <div class="grid grid-cols-3 gap-4">
                                     ${mockData.overdue.monthlyDistribution.map(item => `
                                         <div class="bg-amber-100 p-3 rounded-lg text-center border border-amber-200">
@@ -502,7 +518,7 @@
                                 </div>
                             </div>
                             <div>
-                                <h4 class="text-lg font-semibold text-gray-700 mb-3">التوزيع السنوي</h4>
+                                <h4 class="text-lg font-semibold text-gray-700 mb-3">التوزيع السنوي للسنوات السابقة</h4>
                                 <div class="grid grid-cols-3 gap-4">
                                     ${mockData.overdue.yearlyDistribution.map(item => `
                                         <div class="bg-sky-100 p-3 rounded-lg text-center border border-sky-200">
